@@ -35,7 +35,7 @@
   --max-width: 1200px;
 }
 
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; cursor: url('/cursors/cursor.png'), auto; }
 html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
 body {
@@ -48,8 +48,11 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  cursor: url('/cursors/cursor.png'), auto;
 }
 
+a, button, [role="button"], input[type="submit"],
+.flip-link, .flip-link *, .social-link, .social-link *, .btn { cursor: url('/cursors/pointer.png') 10 4, pointer; }
 a { color: var(--accent); text-decoration: none; transition: color var(--transition); }
 a:hover { color: var(--accent2); }
 img { max-width: 100%; height: auto; }
