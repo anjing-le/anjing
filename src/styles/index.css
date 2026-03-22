@@ -41,7 +41,7 @@
 }
 
 .entry-grid .flip-container {
-  min-height: 220px;
+  min-height: 260px;
 }
 
 .entry-grid .flip-front-title {
@@ -53,10 +53,11 @@
   align-items: center;
   justify-content: space-between;
   text-align: center;
+  padding: 24px 20px;
 }
 
 .entry-desc {
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   line-height: 1.7;
   color: var(--text2);
   margin-bottom: 10px;
@@ -360,6 +361,14 @@
 
 /* ───── Responsive ───── */
 @media (max-width: 1024px) {
+  .entry-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .entry-grid .flip-container:last-child {
+    grid-column: 1 / -1;
+    max-width: 50%;
+    justify-self: center;
+  }
   .idx-trio-grid {
     grid-template-columns: 1fr;
   }
