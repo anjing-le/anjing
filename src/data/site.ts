@@ -1,7 +1,7 @@
 export const site = {
-  hub: 'ai-lab',
-  name: '安静 · AI Lab',
-  tagline: '大模型应用实战',
+  hub: 'cs',
+  name: '安静 · 计算机',
+  tagline: '基础 · 工程 · AI',
   assetBase: '/assets/hubs',
   contentBase: 'src/content/hubs',
 };

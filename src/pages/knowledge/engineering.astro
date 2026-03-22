@@ -6,6 +6,6 @@ import { domains } from '../../data/knowledge';
 const domain = domains.find((d) => d.id === 'engineering')!;
 ---
 
-<BaseLayout title={`${domain.title} — 安静 · AI Lab`}>
-  <KnowledgePage domain={domain} backHref="/ai" backLabel="返回 AI Hub" />
+<BaseLayout title={`${domain.title} — 安静 · 计算机`} hub="cs">
+  <KnowledgePage domain={domain} backHref="/cs" backLabel="返回计算机" />
 </BaseLayout>

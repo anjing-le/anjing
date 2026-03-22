@@ -6,16 +6,16 @@ import { domains } from '../../../data/knowledge';
 const { hub, slug } = Astro.params;
 export function getStaticPaths() {
   return domains
-    .filter((domain) => domain.hub === 'ai-lab' || domain.hub === 'finance')
+    .filter((domain) => domain.hub === 'cs' || domain.hub === 'finance')
     .map((domain) => ({
-      params: { hub: domain.hub === 'ai-lab' ? 'ai' : 'finance', slug: domain.id },
+      params: { hub: domain.hub, slug: domain.id },
     }));
 }
 
-const domain = domains.find((d) => d.hub === (hub === 'ai' ? 'ai-lab' : hub) && d.id === slug);
+const domain = domains.find((d) => d.hub === hub && d.id === slug);
 ---
 
-<BaseLayout title={domain ? `${domain.title} — 安静` : '未找到页面 — 安静'}>
+<BaseLayout title={domain ? `${domain.title} — 安静` : '未找到页面 — 安静'} hub={hub}>
   {domain ? (
     <KnowledgePage domain={domain} backHref={`/${hub}`} backLabel="返回赛道首页" />
   ) : (

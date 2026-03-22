@@ -29,21 +29,21 @@ export interface LearningPath {
 
 export const paths: LearningPath[] = [
   {
-    hub: 'ai-lab',
+    hub: 'cs',
     id: 'graduate',
     title: '考研复试',
     subtitle: '证明你的基础和热情',
     icon: 'graduation-cap',
     color: 'var(--accent)',
     colorBg: 'var(--accent-glow)',
-    description: '导师想看到的不只是分数，更是扎实的基础、动手能力、以及对 AI 方向的热情和独立思考。',
+    description: '导师想看到的不只是分数，更是扎实的计算机基础、动手能力、以及对技术方向的热情和独立思考。',
     audience: ['考研初试已过，准备复试', '跨考计算机/AI方向', '想在复试中展现项目经验'],
-    goal: '面试时能自信地讲出一个完整 AI 项目的设计思路和技术细节',
+    goal: '面试时能自信地讲出计算机基础和一个完整项目的设计思路与技术细节',
     steps: [
       {
         order: 1,
         title: '基础认知',
-        description: '快速理解 AI 应用开发的全景：HTTP 是什么、前后端怎么配合、LLM 是怎么工作的、Agent 能做什么。不求精通，但求理解全局。',
+        description: '快速理解计算机与 AI 应用开发的全景：HTTP 是什么、前后端怎么配合、LLM 是怎么工作的、Agent 能做什么。不求精通，但求理解全局。',
         duration: '1-2 天',
         projects: [],
         resources: [
@@ -65,7 +65,7 @@ export const paths: LearningPath[] = [
       {
         order: 3,
         title: '项目实战',
-        description: '深入一个完整的 AI 项目。推荐知识库 RAG 系统——技术含量高、面试问得多、有 9 章配套精讲课程。跑通代码、理解架构、能画出系统图。',
+        description: '深入一个完整的项目。推荐知识库 RAG 系统——技术含量高、面试问得多、有 9 章配套精讲课程。跑通代码、理解架构、能画出系统图。',
         duration: '5-7 天',
         projects: ['knowledge'],
         resources: [
@@ -89,7 +89,7 @@ export const paths: LearningPath[] = [
     ],
   },
   {
-    hub: 'ai-lab',
+    hub: 'cs',
     id: 'campus',
     title: '校招求职',
     subtitle: '证明你能干活',
@@ -98,12 +98,12 @@ export const paths: LearningPath[] = [
     colorBg: 'var(--green-bg)',
     description: '面试官要的不是你背了多少八股文，而是你能不能真正做出东西、讲清楚每个技术选择背后的原因。',
     audience: ['应届毕业生找工作', '想转 AI 方向的在校生', '需要项目经验充实简历'],
-    goal: '简历上有 2+ 个真实 AI 项目，面试时每个技术点都讲得出 why',
+    goal: '简历上有 2+ 个真实项目，面试时每个技术点都讲得出 why',
     steps: [
       {
         order: 1,
         title: '基础速补',
-        description: '快速补齐 AI 应用开发的基础认知。',
+        description: '快速补齐计算机基础和 AI 应用开发的基础认知。',
         duration: '1-2 天',
         projects: [],
         resources: [
@@ -147,7 +147,7 @@ export const paths: LearningPath[] = [
     ],
   },
   {
-    hub: 'ai-lab',
+    hub: 'cs',
     id: 'career-change',
     title: '转型跨行',
     subtitle: '跨过从 0 到 1 的门槛',
@@ -155,13 +155,13 @@ export const paths: LearningPath[] = [
     color: 'var(--orange)',
     colorBg: 'var(--orange-bg)',
     description: '你不需要从零学三年计算机，你需要的是一个能跑通的项目、一套能理解的知识体系、和一个带你入门的人。',
-    audience: ['非计算机背景想转 AI', '有编程基础想做 AI 应用', '想快速出活证明自己'],
-    goal: '能独立跑通一个 AI 项目，能向别人解释它是怎么工作的',
+    audience: ['非计算机背景想转行', '有编程基础想做 AI 应用', '想快速出活证明自己'],
+    goal: '能独立跑通一个完整项目，能向别人解释它是怎么工作的',
     steps: [
       {
         order: 1,
         title: '概念理解',
-        description: '重点理解 AI 应用层概念，不需要深入算法。',
+        description: '重点理解计算机和 AI 应用层概念，不需要深入算法。',
         duration: '2-3 天',
         projects: [],
         resources: [
@@ -206,16 +206,16 @@ export const paths: LearningPath[] = [
     ],
   },
   {
-    hub: 'ai-lab',
+    hub: 'cs',
     id: 'advance',
     title: '职场进阶',
     subtitle: '前沿视野 + 落地经验',
     icon: 'rocket',
     color: 'var(--purple)',
     colorBg: 'var(--purple-bg)',
-    description: '你已经有工程经验，需要的是 AI 应用的前沿视野、真实落地经验、和引领团队的系统化知识。',
-    audience: ['3+ 年经验的开发者', '技术 Leader / 架构师', '想在团队推动 AI 落地'],
-    goal: '掌握 AI 应用架构设计方法论，能带领团队落地 AI 项目',
+    description: '你已经有工程经验，需要的是前沿视野、真实落地经验、和引领团队的系统化知识。',
+    audience: ['3+ 年经验的开发者', '技术 Leader / 架构师', '想在团队推动技术升级'],
+    goal: '掌握系统架构设计方法论，能带领团队落地复杂项目',
     steps: [
       {
         order: 1,
@@ -252,7 +252,7 @@ export const paths: LearningPath[] = [
       {
         order: 4,
         title: '输出沉淀',
-        description: '整理成团队分享材料，形成可落地的 AI 应用方案。',
+        description: '整理成团队分享材料，形成可落地的技术方案。',
         duration: '持续',
         projects: [],
         resources: [

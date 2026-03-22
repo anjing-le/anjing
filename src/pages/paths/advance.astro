@@ -7,6 +7,6 @@ import { projects } from '../../data/projects';
 const path = paths.find((p) => p.id === 'advance')!;
 ---
 
-<BaseLayout title={`${path.title} — 安静 · AI Lab`}>
-  <PathTimeline path={path} projects={projects} theme="purple" backHref="/ai" backLabel="返回 AI Hub" />
+<BaseLayout title={`${path.title} — 安静 · 计算机`} hub="cs">
+  <PathTimeline path={path} projects={projects} theme="purple" backHref="/cs" backLabel="返回计算机" />
 </BaseLayout>
