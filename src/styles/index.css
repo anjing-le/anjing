@@ -51,16 +51,16 @@
 
 .entry-grid .flip-back {
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   text-align: center;
-  padding: 24px 20px;
+  padding: 28px 24px;
+  gap: 10px;
 }
 
 .entry-desc {
-  font-size: 0.82rem;
-  line-height: 1.7;
+  font-size: 0.8rem;
+  line-height: 1.65;
   color: var(--text2);
-  margin-bottom: 10px;
 }
 
 .entry-list {
