@@ -1,0 +1,407 @@
+---
+import Icon from './Icon.astro';
+import type { KnowledgeDomain } from '../data/knowledge';
+
+interface Props {
+  domain: KnowledgeDomain;
+  backHref?: string;
+  backLabel?: string;
+}
+
+const { domain, backHref = '/', backLabel = '返回首页' } = Astro.props;
+
+const hasGroups = domain.groups.length > 0;
+const firstGroup = domain.groups[0];
+const firstItem = firstGroup?.items[0];
+---
+
+<div class="kn-page" style={`--kn-color: ${domain.color}; --kn-soft: ${domain.soft}`}>
+
+  <section class="kn-hero">
+    <div class="container">
+      <a href={backHref} class="back-link">
+        <Icon name="arrow-left" size={16} strokeWidth={2} /> {backLabel}
+      </a>
+      <div class="kn-hero-row">
+        <div class="kn-icon">
+          <Icon name={domain.icon} size={28} strokeWidth={1.5} />
+        </div>
+        <h1 class="kn-title">{domain.title}</h1>
+        <span class="kn-sub">{domain.subtitle}</span>
+      </div>
+      <p class="kn-desc">{domain.description}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      {hasGroups ? (
+        <div class="kn-layout">
+          <aside class="kn-nav">
+            {domain.groups.map((group, groupIndex) => (
+              <section class="kn-section-block">
+                <div class="kn-section-head">
+                  <h2 class="kn-section-title">{group.title}</h2>
+                  <p class="kn-section-desc">{group.summary}</p>
+                </div>
+
+                <div class="kn-item-list">
+                  {group.items.map((item, itemIndex) => (
+                    <button
+                      class={`kn-item-btn${groupIndex === 0 && itemIndex === 0 ? ' active' : ''}`}
+                      type="button"
+                      data-group={group.id}
+                      data-item={item.id}
+                    >
+                      <span class="kn-item-bullet"></span>
+                      <span class="kn-item-title">{item.title}</span>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </aside>
+
+          <section class="kn-detail" data-kn-detail>
+            {firstItem ? (
+              <div class="kn-panels">
+                {domain.groups.map((group) =>
+                  group.items.map((item, itemIndex) => (
+                    <article
+                      class={`kn-panel${group.id === firstGroup?.id && item.id === firstItem.id ? ' active' : ''}`}
+                      data-panel
+                      data-group={group.id}
+                      data-item={item.id}
+                    >
+                      <div class="kn-doc-placeholder">
+                        <p>这里后续展示 Markdown 正文预览</p>
+                      </div>
+                    </article>
+                  ))
+                )}
+              </div>
+            ) : (
+              <div class="kn-empty">
+                <Icon name="sparkles" size={24} strokeWidth={1.8} />
+                <p>内容还在整理中，后面会按「摘要 + Markdown + 视频封面」逐步补齐。</p>
+              </div>
+            )}
+          </section>
+        </div>
+      ) : (
+        <div class="kn-empty">
+          <Icon name="sparkles" size={24} strokeWidth={1.8} />
+          <p>内容还在整理中，后面会按「摘要 + Markdown + 视频封面」逐步补齐。</p>
+        </div>
+      )}
+
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLElement>('[data-item]');
+  const panels = document.querySelectorAll<HTMLElement>('[data-panel]');
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const groupId = button.dataset.group;
+      const itemId = button.dataset.item;
+      if (!groupId || !itemId) return;
+
+      buttons.forEach((b) => b.classList.remove('active'));
+      button.classList.add('active');
+
+      panels.forEach((panel) => {
+        const match = panel.dataset.group === groupId && panel.dataset.item === itemId;
+        panel.classList.toggle('active', match);
+      });
+
+      button.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      const sticky = document.querySelector<HTMLElement>('[data-kn-detail]');
+      if (sticky) {
+        sticky.scrollTop = 0;
+      }
+    });
+  });
+</script>
+
+<style>
+  .kn-hero { padding: 36px 0 8px; }
+
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.78rem; color: var(--text3); margin-bottom: 10px;
+    text-decoration: none;
+  }
+  .back-link:hover { color: var(--kn-color); }
+
+  .kn-hero-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 6px;
+  }
+
+  .kn-icon {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: var(--kn-soft); color: var(--kn-color);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .kn-title { font-size: 1.28rem; font-weight: 800; letter-spacing: -0.02em; }
+  .kn-sub { color: var(--text3); font-size: 0.8rem; }
+  .kn-desc {
+    color: var(--text2); font-size: 0.8rem; line-height: 1.6;
+    max-width: 560px;
+  }
+
+  .kn-layout {
+    display: grid;
+    grid-template-columns: minmax(270px, 0.62fr) minmax(0, 1.38fr);
+    gap: 10px;
+    align-items: start;
+  }
+
+  .kn-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: sticky;
+    top: 8px;
+    max-height: calc(100vh - 96px);
+    overflow: auto;
+    padding-right: 2px;
+  }
+
+  .kn-section-block {
+    background: var(--surface2);
+    border-radius: var(--radius-lg);
+    padding: 8px 9px 7px;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+  }
+
+  .kn-section-head {
+    display: flex; justify-content: flex-start; align-items: baseline;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.035);
+  }
+
+  .kn-section-title {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .kn-section-desc {
+    display: none;
+  }
+
+  .kn-item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-left: 2px;
+    position: relative;
+  }
+
+  .kn-item-list::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 2px;
+    bottom: 2px;
+    width: 1px;
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .kn-item-btn {
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    padding: 6px 8px 6px 22px;
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition);
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .kn-item-btn:hover,
+  .kn-item-btn.active {
+    background: var(--kn-soft);
+  }
+
+  .kn-item-btn:hover .kn-item-title,
+  .kn-item-btn.active .kn-item-title {
+    color: var(--kn-color);
+  }
+
+  .kn-item-bullet {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--text3);
+    flex-shrink: 0;
+    margin-left: -12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .kn-item-btn.active .kn-item-bullet {
+    background: var(--kn-color);
+  }
+
+  .kn-item-title {
+    font-size: 0.73rem;
+    color: var(--text);
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .kn-detail {
+    position: sticky;
+    top: 8px;
+    background: var(--surface2);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    min-height: 440px;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+  }
+
+  .kn-panels {
+    position: relative;
+  }
+
+  .kn-panel {
+    display: none;
+    animation: knFadeIn 0.18s ease;
+  }
+
+  .kn-panel.active {
+    display: block;
+  }
+
+  @keyframes knFadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .kn-doc-placeholder {
+    min-height: 470px;
+    border-radius: 14px;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text3);
+    padding: 24px;
+    text-align: center;
+  }
+
+  .kn-doc-placeholder p {
+    max-width: 260px;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .kn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .kn-card {
+    display: block;
+    background: var(--surface2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: all var(--transition);
+    text-decoration: none;
+    color: inherit;
+  }
+  .kn-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+  .kn-card-link:hover { color: inherit; }
+
+  .kn-card-body { padding: 16px 18px; }
+
+  .kn-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .kn-card-icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--kn-soft); color: var(--kn-color);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .kn-badge {
+    font-size: 0.68rem; padding: 2px 8px; border-radius: 10px;
+    font-weight: 500;
+  }
+  .kn-badge--doc { background: var(--accent-soft); color: var(--accent); }
+  .kn-badge--video { background: var(--orange-soft); color: var(--orange); }
+
+  .kn-card-title {
+    font-size: 0.95rem; font-weight: 700; color: var(--text);
+    margin-bottom: 4px;
+  }
+  .kn-card-desc {
+    font-size: 0.8rem; color: var(--text2); line-height: 1.6;
+  }
+
+  /* Video */
+  .kn-video-wrap {
+    width: 100%; aspect-ratio: 16 / 9;
+    background: var(--bg); overflow: hidden;
+  }
+
+  .kn-video-cover {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+
+  .kn-video {
+    width: 100%; height: 100%; object-fit: cover;
+    display: block;
+  }
+
+  .kn-video-placeholder {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px;
+    color: var(--text3);
+  }
+  .kn-video-placeholder span { font-size: 0.78rem; }
+
+  .kn-empty {
+    min-height: 180px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px;
+    border-radius: var(--radius-lg);
+    background: var(--surface2);
+    color: var(--text3);
+    text-align: center;
+    padding: 24px;
+  }
+  .kn-empty p { font-size: 0.85rem; line-height: 1.7; max-width: 360px; }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .kn-hero-row { flex-wrap: wrap; gap: 10px; }
+    .kn-layout { grid-template-columns: 1fr; }
+    .kn-nav { position: static; max-height: none; overflow: visible; padding-right: 0; }
+    .kn-detail { position: static; min-height: auto; }
+    .kn-section-head { flex-direction: column; }
+    .kn-section-desc { max-width: none; }
+    .kn-item-btn { width: 100%; }
+    .kn-item-list::before { left: 11px; }
+    .kn-item-bullet { margin-left: -12px; }
+  }
+</style>

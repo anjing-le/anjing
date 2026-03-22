@@ -1,0 +1,242 @@
+---
+import Icon from './Icon.astro';
+
+const socials = [
+  { name: 'GitHub', url: 'https://github.com/anjing-le', icon: 'github' },
+  { name: '小红书', url: 'https://www.xiaohongshu.com/user/profile/64845718000000002a035fc5', icon: 'globe' },
+  { name: 'X', url: '#', icon: 'compass' },
+  { name: 'B站', url: '#', icon: 'presentation' },
+];
+
+const projectLinks = [
+  { name: '智能知识库 RAG', url: '/projects/knowledge' },
+  { name: 'AIGC 多模态创作', url: '/projects/aigc' },
+  { name: '智能电商客服', url: '/projects/customer-service' },
+  { name: 'AI 开发脚手架', url: '/projects/scaffolding' },
+];
+---
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+
+      <!-- 左：品牌信息 -->
+      <div class="footer-left">
+        <div class="footer-brand">安静</div>
+        <p class="footer-desc">一线全栈&大模型应用工程师</p>
+        <div class="footer-social">
+          {socials.map((s) => (
+            <a href={s.url} target="_blank" rel="noopener" class="social-link" title={s.name} aria-label={s.name}>
+              <Icon name={s.icon} size={18} strokeWidth={1.5} />
+            </a>
+          ))}
+          <div class="social-wechat">
+            <span class="social-link" title="微信" aria-label="微信">
+              <Icon name="message-circle" size={18} strokeWidth={1.5} />
+            </span>
+            <div class="wechat-popup">
+              <div class="wechat-qr"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右：预留引流 / 广告区域 -->
+      <div class="footer-right">
+        <div class="promo-card">
+          <div class="promo-inner">
+            <div class="promo-front">引流区域 1</div>
+            <div class="promo-back">内容待补充</div>
+          </div>
+        </div>
+        <div class="promo-card">
+          <div class="promo-inner">
+            <div class="promo-front">引流区域 2</div>
+            <div class="promo-back">内容待补充</div>
+          </div>
+        </div>
+        <div class="promo-card">
+          <div class="promo-inner">
+            <div class="promo-front">引流区域 3</div>
+            <div class="promo-back">内容待补充</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; {new Date().getFullYear()} 安静</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+    padding: 40px 0 0;
+  }
+
+  .footer-inner { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+  .footer-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .footer-left { flex-shrink: 0; }
+  .footer-brand { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
+  .footer-desc { color: var(--text2); font-size: 0.85rem; line-height: 1.6; margin-bottom: 16px; }
+  .footer-social { display: flex; gap: 8px; align-items: center; }
+
+  .footer-grid {
+    align-items: stretch;
+  }
+
+  .footer-right {
+    flex: 1;
+    display: flex;
+    gap: 16px;
+  }
+
+  .promo-card {
+    flex: 1;
+    border-radius: var(--radius-lg);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .promo-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(60, 40, 30, 0.06);
+  }
+
+  .promo-inner {
+    display: grid;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .promo-front,
+  .promo-back {
+    grid-area: 1 / 1;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                filter 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .promo-front {
+    border: 2px dashed var(--text3);
+    color: var(--text3);
+    background: var(--surface2);
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+    z-index: 2;
+  }
+
+  .promo-back {
+    color: var(--text2);
+    background: var(--surface2);
+    opacity: 0;
+    filter: blur(6px);
+    transform: scale(0.97);
+    z-index: 1;
+  }
+
+  .promo-card:hover .promo-front {
+    opacity: 0;
+    filter: blur(8px);
+    transform: scale(1.03);
+  }
+
+  .promo-card:hover .promo-back {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+
+  .social-link {
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: var(--radius-sm);
+    background: var(--surface2); color: var(--text3); transition: all var(--transition);
+    cursor: pointer;
+  }
+  .social-link:hover { background: var(--pink-soft); color: var(--pink); }
+
+  .social-wechat {
+    position: relative;
+  }
+
+  .wechat-popup {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+  }
+
+  .social-wechat:hover .wechat-popup {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .wechat-qr {
+    width: 120px;
+    height: 120px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .wechat-qr::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top: 6px solid var(--surface);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+  }
+
+  .footer-heading {
+    font-size: 0.8rem; font-weight: 600; color: var(--text);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;
+  }
+
+  .footer-link {
+    display: block; color: var(--text2); font-size: 0.82rem;
+    padding: 3px 0; text-decoration: none; transition: color var(--transition);
+  }
+  .footer-link:hover { color: var(--accent); }
+
+  .footer-bottom {
+    margin-top: 32px; padding: 16px 0;
+    border-top: 1px solid var(--border);
+    text-align: center; color: var(--text3); font-size: 0.8rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer-grid { flex-direction: column; gap: 24px; }
+    .footer-left { text-align: center; }
+    .footer-social { justify-content: center; }
+    .footer-right { max-width: 100%; flex-direction: column; }
+  }
+</style>

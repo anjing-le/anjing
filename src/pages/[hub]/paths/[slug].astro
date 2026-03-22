@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PathTimeline from '../../../components/PathTimeline.astro';
+import { paths } from '../../../data/paths';
+import { projects } from '../../../data/projects';
+
+const { hub, slug } = Astro.params;
+export function getStaticPaths() {
+  return paths
+    .filter((path) => path.hub === 'ai-lab' || path.hub === 'finance')
+    .map((path) => ({
+      params: { hub: path.hub === 'ai-lab' ? 'ai' : 'finance', slug: path.id },
+    }));
+}
+
+const path = paths.find((p) => p.hub === (hub === 'ai' ? 'ai-lab' : hub) && p.id === slug);
+
+const themeMap: Record<string, 'accent' | 'green' | 'orange' | 'purple'> = {
+  graduate: 'accent',
+  campus: 'green',
+  'career-change': 'orange',
+  advance: 'purple',
+  'short-term': 'accent',
+  swing: 'green',
+  'mid-term': 'orange',
+  'long-term': 'purple',
+};
+
+const theme = path ? themeMap[path.id] ?? 'accent' : 'accent';
+---
+
+<BaseLayout title={path ? `${path.title} — 安静` : '未找到页面 — 安静'}>
+  {path ? (
+    <PathTimeline path={path} projects={projects} theme={theme} backHref={`/${hub}`} backLabel="返回赛道首页" />
+  ) : (
+    <div class="container" style="padding: 48px 0;">
+      <p>这个路径还没有配置。</p>
+    </div>
+  )}
+</BaseLayout>

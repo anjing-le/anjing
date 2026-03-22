@@ -1,0 +1,181 @@
+---
+import '../styles/index.css';
+
+interface TrioItem {
+  dot: string;
+  label: string;
+  desc: string;
+}
+
+interface TrioCard {
+  title: string;
+  color: string;
+  items: TrioItem[];
+}
+
+interface LinkCard {
+  title: string;
+  hook: string;
+  color: string;
+  href: string;
+  items: string[];
+}
+
+interface Props {
+  title: string;
+  subtitle: string;
+  backHref?: string;
+  backLabel?: string;
+  introNote?: string;
+  trioCards: TrioCard[];
+  pathCards: LinkCard[];
+  knowledgeCards: LinkCard[];
+  pathLead: string;
+}
+
+const {
+  title,
+  subtitle,
+  backHref = '/',
+  backLabel = '返回总入口',
+  introNote,
+  trioCards,
+  pathCards,
+  knowledgeCards,
+  pathLead,
+} = Astro.props;
+---
+
+<div class="container">
+  <div class="idx-layout">
+    <div class="hub-hero">
+      <a href={backHref} class="hub-back">{backLabel}</a>
+      <h1 class="hub-title">{title}</h1>
+      <p class="hub-subtitle">{subtitle}</p>
+      {introNote ? <p class="hub-note">{introNote}</p> : null}
+    </div>
+
+    <div class="idx-trio-grid">
+      {trioCards.map((card) => (
+        <div class="flip-container">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <h2 class="flip-front-title" style={`color:${card.color};`}>{card.title}</h2>
+            </div>
+            <div class="flip-back">
+              <h2 class="flip-back-title" style={`color:${card.color};`}>{card.title}</h2>
+              <div class="idx-skill-list">
+                {card.items.map((item) => (
+                  <div class="idx-skill">
+                    <div class="idx-skill-dot" style={`background:${item.dot};`}></div>
+                    <div>
+                      <strong>{item.label}</strong>
+                      <span>{item.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="idx-paths-section">
+      <p class="idx-paths-sub">{pathLead}</p>
+      <div class="idx-bottom-layout">
+        <div class="idx-paths-grid">
+          {pathCards.map((card) => (
+            <a href={card.href} class="flip-container flip-link">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <h3 class="flip-front-title" style={`color:${card.color};`}>{card.title}</h3>
+                </div>
+                <div class="flip-back">
+                  <h3 class="flip-back-title" style={`color:${card.color};`}>{card.hook}</h3>
+                  <ul class="idx-card-list">
+                    {card.items.map((item) => (
+                      <li><span class="idx-card-dot" style={`background:${card.color};`}></span><span>{item}</span></li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div class="idx-knowledge-grid">
+          {knowledgeCards.map((card) => (
+            <a href={card.href} class="flip-container flip-link">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <h3 class="flip-front-title" style={`color:${card.color};`}>{card.title}</h3>
+                </div>
+                <div class="flip-back">
+                  <h3 class="flip-back-title" style={`color:${card.color};`}>{card.hook}</h3>
+                  <ul class="kn-back-list">
+                    {card.items.map((item) => (
+                      <li>
+                        <span class="idx-card-dot" style={`background:${card.color};`}></span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hub-hero {
+    padding: 44px 0 8px;
+  }
+
+  .hub-back {
+    display: inline-flex;
+    margin-bottom: 12px;
+    font-size: 0.78rem;
+    color: var(--text3);
+    text-decoration: none;
+  }
+
+  .hub-back:hover {
+    color: var(--accent);
+  }
+
+  .hub-title {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+
+  .hub-subtitle {
+    margin-top: 8px;
+    color: var(--text3);
+    font-size: 0.92rem;
+  }
+
+  .hub-note {
+    margin-top: 10px;
+    color: var(--text2);
+    font-size: 0.84rem;
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
+  @media (max-width: 768px) {
+    .hub-hero {
+      padding-top: 28px;
+    }
+
+    .hub-title {
+      font-size: 1.5rem;
+    }
+  }
+</style>

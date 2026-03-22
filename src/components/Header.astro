@@ -1,0 +1,106 @@
+---
+import Icon from './Icon.astro';
+
+const navItems = [
+  { label: '首页', href: '/' },
+  { label: '学习路径', href: '/#paths' },
+  { label: '项目实战', href: '/#projects' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="header">
+  <div class="header-inner">
+    <a href="/" class="brand">
+      <span class="brand-logo"></span>
+      <span class="brand-text">安静 <span class="brand-dot">&middot;</span> AI Lab</span>
+    </a>
+
+    <nav class="nav" id="nav">
+      {navItems.map((item) => (
+        <a href={item.href} class:list={['nav-link', { active: currentPath === item.href }]}>
+          {item.label}
+        </a>
+      ))}
+      <a href="https://github.com/anjing-le" target="_blank" rel="noopener" class="nav-link nav-github" aria-label="GitHub">
+        <Icon name="github" size={18} strokeWidth={1.5} />
+      </a>
+    </nav>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+      <Icon name="menu" size={20} strokeWidth={1.5} />
+    </button>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(253, 245, 243, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+    height: 64px;
+  }
+
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--text);
+    font-weight: 700; font-size: 1.05rem;
+  }
+
+  .brand-logo {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+  }
+
+  .brand-dot { color: var(--pink); margin: 0 2px; }
+
+  .nav { display: flex; align-items: center; gap: 4px; }
+
+  .nav-link {
+    padding: 8px 16px; border-radius: var(--radius-sm);
+    color: var(--text3); font-size: 0.88rem; font-weight: 500;
+    text-decoration: none; transition: all var(--transition);
+  }
+
+  .nav-link:hover, .nav-link.active { color: var(--text); background: var(--surface); }
+
+  .nav-github { display: flex; align-items: center; padding: 8px; margin-left: 4px; }
+
+  .menu-toggle {
+    display: none; background: none; border: none;
+    cursor: pointer; padding: 8px; color: var(--text3);
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle { display: flex; align-items: center; }
+    .nav {
+      display: none; position: absolute; top: 64px; left: 0; right: 0;
+      flex-direction: column; background: rgba(253, 245, 243, 0.96);
+      backdrop-filter: blur(24px); border-bottom: 1px solid var(--border);
+      padding: 16px 24px; gap: 4px;
+    }
+    .nav.open { display: flex; }
+    .nav-link { width: 100%; padding: 12px 16px; }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('menuToggle');
+  const nav = document.getElementById('nav');
+  toggle?.addEventListener('click', () => nav?.classList.toggle('open'));
+</script>

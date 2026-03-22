@@ -1,0 +1,284 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { projects } from '../../data/projects';
+
+const project = projects.find((p) => p.id === 'scaffolding')!;
+
+const features = [
+  { icon: 'package', title: '项目模板', desc: '20+ 页面模板，涵盖常见业务场景，可快速生长新项目' },
+  { icon: 'code', title: 'Cursor Rules', desc: '12 条 Rules + 4 个 Prompts，AI 协作开发最佳实践' },
+  { icon: 'bot', title: 'AI 协作流程', desc: 'AI 时代的工程化协作方法论，人机协同高效开发' },
+  { icon: 'layers', title: '前后端架构', desc: 'Vue 3.5 + Spring Boot 3.4 完整前后端工程化规范' },
+  { icon: 'play', title: '游客模式', desc: '无需后端服务即可体验完整 UI 交互和页面流转' },
+  { icon: 'shield', title: '工程规范', desc: '代码规范、Git 规范、文档规范，团队协作最佳实践' },
+];
+
+const archSteps = [
+  { icon: 'package', label: '模板选择', soft: 'var(--accent-soft)', color: 'var(--accent)' },
+  { icon: 'settings', label: '工程配置', soft: 'var(--green-soft)', color: 'var(--green)' },
+  { icon: 'bot', label: 'AI 增强', soft: 'var(--purple-soft)', color: 'var(--purple)' },
+  { icon: 'code', label: '开发编码', soft: 'var(--orange-soft)', color: 'var(--orange)' },
+  { icon: 'rocket', label: '部署交付', soft: 'var(--cyan-soft)', color: 'var(--cyan)' },
+];
+
+const typeIcon: Record<string, string> = { doc: 'file-text', html: 'globe', ppt: 'presentation', diagram: 'pen-tool' };
+const typeLabel: Record<string, string> = { doc: '文档', html: '互动课件', ppt: '演示文稿', diagram: '架构图' };
+---
+
+<BaseLayout title={`${project.name} — 安静 · AI Lab`}>
+
+  <!-- Hero -->
+  <section class="proj-hero">
+    <div class="container">
+      <a href="/" class="back-link">
+        <Icon name="arrow-left" size={16} strokeWidth={2} /> 返回首页
+      </a>
+
+      <div class="hero-row">
+        <div class="hero-info">
+          <div class="hero-badge">
+            <Icon name="package" size={16} strokeWidth={2} /> 开发脚手架
+          </div>
+          <h1 class="hero-title">{project.name}</h1>
+          <p class="hero-subtitle">{project.subtitle}</p>
+          <p class="hero-desc">{project.description}</p>
+
+          <div class="hero-tags">
+            {project.techStack.map((t) => <span class="tag">{t}</span>)}
+          </div>
+
+          <div class="hero-actions">
+            {project.github && (
+              <a href={project.github} target="_blank" rel="noopener" class="btn btn--primary">
+                <Icon name="github" size={16} strokeWidth={2} /> 查看源码
+              </a>
+            )}
+            <a href="#materials" class="btn btn--outline">
+              <Icon name="book-open" size={16} strokeWidth={2} /> 教学资料
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-stats card">
+          <div class="stat-row">
+            <span class="stat-label">完成度</span>
+            <span class="stat-value" style="color: var(--accent)">{project.completion}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style={`width: ${project.completion}%; background: var(--accent);`}></div>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Cursor Rules</span>
+            <span class="stat-value">12 条</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">教学资料</span>
+            <span class="stat-value">{project.teachingMaterials.length} 份</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">状态</span>
+            <span class="tag tag--green">Active</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section section--alt">
+    <div class="container">
+      <h2 class="section-title">核心功能</h2>
+      <p class="section-subtitle">AI 时代的工程化开发基石</p>
+
+      <div class="features-grid">
+        {features.map((f) => (
+          <div class="feature-card card">
+            <div class="feature-icon">
+              <Icon name={f.icon} size={20} strokeWidth={1.5} />
+            </div>
+            <h3 class="feature-title">{f.title}</h3>
+            <p class="feature-desc">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">开发流程</h2>
+      <p class="section-subtitle">从模板到交付的 AI 增强开发流程</p>
+
+      <div class="arch-flow">
+        {archSteps.map((step, i) => (
+          <Fragment>
+            <div class="arch-step">
+              <div class="arch-icon" style={`background: ${step.soft}; color: ${step.color};`}>
+                <Icon name={step.icon} size={22} strokeWidth={1.5} />
+              </div>
+              <span class="arch-label">{step.label}</span>
+            </div>
+            {i < archSteps.length - 1 && (
+              <div class="arch-arrow">
+                <Icon name="arrow-right" size={18} strokeWidth={2} />
+              </div>
+            )}
+          </Fragment>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Highlights -->
+  <section class="section section--alt">
+    <div class="container">
+      <h2 class="section-title">项目亮点</h2>
+      <p class="section-subtitle">为什么这个项目值得学</p>
+
+      <div class="highlights-grid">
+        {project.highlights.map((h, i) => (
+          <div class="highlight-item card">
+            <div class="highlight-num">{String(i + 1).padStart(2, '0')}</div>
+            <p class="highlight-text">{h}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaching Materials -->
+  <section class="section" id="materials">
+    <div class="container">
+      <h2 class="section-title">教学资料</h2>
+      <p class="section-subtitle">配套 {project.teachingMaterials.length} 份教学资料</p>
+
+      <div class="materials-grid">
+        {project.teachingMaterials.map((m) => (
+          <div class="material-card card">
+            <div class="material-header">
+              <div class="material-icon">
+                <Icon name={typeIcon[m.type]} size={18} strokeWidth={1.5} />
+              </div>
+              <span class="material-type">{typeLabel[m.type]}</span>
+            </div>
+            <h3 class="material-title">{m.title}</h3>
+            <p class="material-desc">{m.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .proj-hero { padding: 48px 0 20px; }
+
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.85rem; color: var(--text3); margin-bottom: 16px;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  .hero-row { display: grid; grid-template-columns: 1fr 280px; gap: 40px; align-items: start; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 0.8rem; font-weight: 600;
+    color: var(--orange); background: var(--orange-soft);
+    border: 1px solid rgba(232,176,122,0.15);
+    margin-bottom: 16px;
+  }
+
+  .hero-title { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .hero-subtitle { font-size: 1rem; color: var(--text3); margin-bottom: 14px; }
+  .hero-desc { font-size: 0.9rem; color: var(--text2); line-height: 1.7; margin-bottom: 20px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .hero-actions { display: flex; gap: 12px; }
+
+  .hero-stats { padding: 24px; }
+  .stat-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { font-size: 0.85rem; color: var(--text2); }
+  .stat-value { font-size: 1rem; font-weight: 700; color: var(--text); }
+
+  .progress-bar {
+    width: 100%; height: 4px;
+    background: var(--surface2); border-radius: 4px;
+    margin-bottom: 4px; overflow: hidden;
+  }
+  .progress-fill { height: 100%; border-radius: 4px; }
+
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .feature-icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--orange-soft); color: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .feature-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+  .feature-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+
+  .arch-flow {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; padding: 28px 20px;
+    background: var(--surface2); border: none;
+    border-radius: var(--radius);
+    flex-wrap: wrap;
+  }
+
+  .arch-step { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+  .arch-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .arch-label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .arch-arrow { color: var(--text3); }
+
+  .highlights-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  .highlight-item { display: flex; align-items: flex-start; gap: 16px; }
+
+  .highlight-num {
+    font-size: 1.4rem; font-weight: 800; color: var(--orange);
+    flex-shrink: 0; line-height: 1;
+    opacity: 0.5;
+  }
+
+  .highlight-text { font-size: 0.95rem; color: var(--text); line-height: 1.6; }
+
+  .materials-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  .material-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+
+  .material-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--orange-soft); color: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .material-type { font-size: 0.75rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+  .material-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+  .material-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+
+  @media (max-width: 768px) {
+    .hero-row { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .highlights-grid { grid-template-columns: 1fr; }
+    .materials-grid { grid-template-columns: 1fr; }
+    .arch-flow { gap: 12px; padding: 24px 16px; }
+    .arch-arrow { display: none; }
+    .hero-actions { flex-direction: column; }
+  }
+</style>
