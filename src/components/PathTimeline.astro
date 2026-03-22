@@ -1,0 +1,339 @@
+---
+import Icon from './Icon.astro';
+import type { LearningPath } from '../data/paths';
+import type { Project } from '../data/projects';
+
+interface Props {
+  path: LearningPath;
+  projects: Project[];
+  theme: 'accent' | 'green' | 'orange' | 'purple';
+  backHref?: string;
+  backLabel?: string;
+}
+
+const { path, projects, theme, backHref = '/', backLabel = '返回首页' } = Astro.props;
+
+const themeMap: Record<string, { color: string; soft: string }> = {
+  accent: { color: 'var(--accent)', soft: 'var(--accent-soft)' },
+  green: { color: 'var(--green)', soft: 'var(--green-soft)' },
+  orange: { color: 'var(--orange)', soft: 'var(--orange-soft)' },
+  purple: { color: 'var(--purple)', soft: 'var(--purple-soft)' },
+};
+
+const t = themeMap[theme];
+---
+
+<div class="path-page" style={`--tl-color: ${t.color}; --tl-soft: ${t.soft}`}>
+
+  <section class="path-hero">
+    <div class="container">
+      <a href={backHref} class="back-link">
+        <Icon name="arrow-left" size={16} strokeWidth={2} /> {backLabel}
+      </a>
+      <div class="hero-row">
+        <div class="hero-icon">
+          <Icon name={path.icon} size={32} strokeWidth={1.5} />
+        </div>
+        <h1 class="hero-title">{path.title}</h1>
+        <span class="hero-sub">{path.subtitle}</span>
+      </div>
+      <div class="hero-meta-row">
+        <div class="meta-card meta-card--audience">
+          <span class="meta-label">适合</span>
+          <div class="meta-tags">
+            {path.audience.map((a) => <span class="meta-tag">{a}</span>)}
+          </div>
+        </div>
+        <div class="meta-card meta-card--goal">
+          <span class="meta-label">目标</span>
+          <p class="meta-text">{path.goal}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">学习路线</h2>
+
+      <div class="tl-track">
+        {path.steps.map((step, i) => (
+          <>
+            {i > 0 && <div class="tl-arrow" />}
+            <button
+              class={`tl-card${i === 0 ? ' active' : ''}`}
+              data-step={i}
+              type="button"
+            >
+              <span class="tl-num">Step{step.order}</span>
+              <h3 class="tl-name">{step.title}</h3>
+              <span class="tl-dur">{step.duration}</span>
+            </button>
+          </>
+        ))}
+      </div>
+
+      {path.steps.map((step, i) => {
+        const hasDoc = step.resources.some((r) => r.type === 'doc');
+        const hasVideo = step.resources.some((r) => r.type === 'video');
+        const showTabs = hasDoc && hasVideo;
+
+        return (
+          <div class={`panel${i === 0 ? ' active' : ''}`} data-panel={i}>
+            {step.projects.length > 0 && (
+              <div class="panel-projects">
+                <span class="panel-label">
+                  <Icon name="layers" size={14} strokeWidth={2} /> 涉及项目
+                </span>
+                <div class="panel-proj-tags">
+                  {step.projects.map((pid) => {
+                    const proj = projects.find((p) => p.id === pid);
+                    return proj ? (
+                      <a href={`/projects/${proj.id}`} class="proj-link">
+                        {proj.name}
+                      </a>
+                    ) : null;
+                  })}
+                </div>
+              </div>
+            )}
+
+            {step.resources.length > 0 && (
+              <div class="res-section">
+                {showTabs && (
+                  <div class="res-tabs">
+                    <button class="res-tab active" data-type="all" type="button">全部</button>
+                    <button class="res-tab" data-type="doc" type="button">文档</button>
+                    <button class="res-tab" data-type="video" type="button">视频</button>
+                  </div>
+                )}
+                <div class="res-grid">
+                  {step.resources.map((r) => (
+                    <div class="res-card" data-res-type={r.type}>
+                      <div class="res-icon">
+                        <Icon
+                          name={r.type === 'video' ? 'play-circle' : 'file-text'}
+                          size={18}
+                          strokeWidth={1.8}
+                        />
+                      </div>
+                      <span class="res-name">{r.name}</span>
+                      <span class={`res-badge res-badge--${r.type}`}>
+                        {r.type === 'doc' ? '文档' : '视频'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+</div>
+
+<script>
+  document.querySelectorAll('.tl-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const step = (card as HTMLElement).dataset.step;
+      document.querySelectorAll('.tl-card').forEach((c) => c.classList.remove('active'));
+      card.classList.add('active');
+      document.querySelectorAll('.panel[data-panel]').forEach((p) => p.classList.remove('active'));
+      document.querySelector(`.panel[data-panel="${step}"]`)?.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.res-tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const panel = tab.closest('.panel');
+      if (!panel) return;
+      const type = (tab as HTMLElement).dataset.type;
+      panel.querySelectorAll('.res-tab').forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
+      panel.querySelectorAll('.res-card').forEach((card) => {
+        const el = card as HTMLElement;
+        el.style.display = type === 'all' || el.dataset.resType === type ? '' : 'none';
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Hero */
+  .path-hero { padding: 48px 0 16px; }
+
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.82rem; color: var(--text3); margin-bottom: 16px;
+    text-decoration: none;
+  }
+  .back-link:hover { color: var(--tl-color); }
+
+  .hero-row {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 10px;
+  }
+
+  .hero-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: var(--tl-soft); color: var(--tl-color);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .hero-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+  .hero-sub { color: var(--text3); font-size: 0.88rem; }
+  .hero-meta-row { display: flex; gap: 12px; align-items: stretch; }
+
+  .meta-card {
+    flex: 1; border-radius: var(--radius); padding: 14px 18px;
+  }
+  .meta-card--audience { background: var(--surface2); }
+  .meta-card--goal { background: var(--tl-soft); }
+
+  .meta-label {
+    display: block; font-size: 0.72rem; font-weight: 700; color: var(--tl-color);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
+  }
+  .meta-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .meta-tag {
+    font-size: 0.78rem; color: var(--text2); background: var(--bg);
+    padding: 2px 10px; border-radius: 12px;
+  }
+  .meta-text { font-size: 0.85rem; color: var(--text); line-height: 1.6; font-weight: 500; }
+
+  /* Horizontal Timeline */
+  .tl-track {
+    display: flex; align-items: center; gap: 8px;
+    overflow-x: auto; padding-bottom: 8px; margin-bottom: 28px;
+    scrollbar-width: thin;
+  }
+
+  .tl-card {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 18px 14px; background: var(--surface2);
+    border: 2px solid transparent; border-radius: var(--radius);
+    cursor: pointer; transition: all var(--transition);
+    font-family: inherit;
+  }
+  .tl-card:hover { box-shadow: var(--shadow); }
+  .tl-card.active {
+    border-color: var(--tl-color); background: var(--bg);
+    box-shadow: var(--shadow);
+  }
+
+  .tl-num {
+    padding: 4px 12px; border-radius: 14px;
+    background: var(--bg); color: var(--text3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 700;
+    transition: all var(--transition);
+  }
+  .tl-card.active .tl-num {
+    background: var(--tl-soft); color: var(--tl-color);
+  }
+
+  .tl-name {
+    font-size: 0.9rem; font-weight: 600; color: var(--text);
+    white-space: nowrap;
+  }
+  .tl-dur { font-size: 0.75rem; color: var(--text3); }
+
+  .tl-arrow {
+    flex-shrink: 0; width: 24px; height: 2px;
+    background: var(--text3); position: relative;
+  }
+  .tl-arrow::after {
+    content: ''; position: absolute; right: -1px; top: 50%;
+    transform: translateY(-50%);
+    border: 4px solid transparent;
+    border-left: 5px solid var(--text3);
+  }
+
+  /* Content Panel */
+  .panel { display: none; }
+  .panel.active {
+    display: block;
+    animation: panelIn 0.3s ease;
+  }
+
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-projects { margin-bottom: 20px; }
+  .panel-label {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 0.72rem; font-weight: 600; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 8px;
+  }
+  .panel-label :global(svg) { color: var(--tl-color); }
+
+  .panel-proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .proj-link {
+    display: inline-block; padding: 4px 14px; border-radius: 16px;
+    font-size: 0.8rem; font-weight: 500;
+    background: var(--tl-soft); color: var(--tl-color);
+    text-decoration: none; transition: opacity 0.2s;
+  }
+  .proj-link:hover { opacity: 0.7; }
+
+  /* Resource Section */
+  .res-section { margin-top: 4px; }
+
+  .res-tabs { display: flex; gap: 4px; margin-bottom: 14px; }
+  .res-tab {
+    padding: 6px 16px; border-radius: 20px; border: none;
+    background: var(--surface2); color: var(--text3);
+    font-size: 0.82rem; font-weight: 500; font-family: inherit;
+    cursor: pointer; transition: all var(--transition);
+  }
+  .res-tab:hover { color: var(--text2); }
+  .res-tab.active { background: var(--tl-soft); color: var(--tl-color); }
+
+  .res-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
+
+  .res-card {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px; background: var(--surface2);
+    border-radius: var(--radius-sm); transition: all var(--transition);
+    cursor: default;
+  }
+  .res-card:hover { box-shadow: var(--shadow); }
+
+  .res-icon {
+    width: 34px; height: 34px; border-radius: 10px;
+    background: var(--tl-soft); color: var(--tl-color);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .res-name {
+    font-size: 0.85rem; color: var(--text); flex: 1;
+    line-height: 1.4;
+  }
+
+  .res-badge {
+    font-size: 0.68rem; padding: 2px 8px; border-radius: 10px;
+    font-weight: 500; flex-shrink: 0;
+  }
+  .res-badge--doc { background: var(--accent-soft); color: var(--accent); }
+  .res-badge--video { background: var(--orange-soft); color: var(--orange); }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .hero-row { gap: 12px; }
+    .hero-meta-row { flex-direction: column; gap: 10px; }
+    .tl-track { gap: 6px; }
+    .tl-card { min-width: 100px; padding: 14px 8px; }
+    .tl-name { font-size: 0.8rem; }
+    .res-grid { grid-template-columns: 1fr; }
+  }
+</style>

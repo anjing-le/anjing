@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PathTimeline from '../../components/PathTimeline.astro';
+import { paths } from '../../data/paths';
+import { projects } from '../../data/projects';
+
+const path = paths.find((p) => p.id === 'advance')!;
+---
+
+<BaseLayout title={`${path.title} — 安静 · AI Lab`}>
+  <PathTimeline path={path} projects={projects} theme="purple" backHref="/ai" backLabel="返回 AI Hub" />
+</BaseLayout>

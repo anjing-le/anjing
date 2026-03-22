@@ -1,0 +1,359 @@
+/* ═══════════════════════════════════════
+   首页样式 — index.astro
+   ═══════════════════════════════════════ */
+
+.idx-layout {
+  padding: 32px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.entry-hero {
+  padding: 44px 0 12px;
+  max-width: 720px;
+}
+
+.entry-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--text);
+}
+
+.entry-subtitle {
+  margin-top: 10px;
+  color: var(--text3);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.entry-grid .flip-container {
+  min-height: 220px;
+}
+
+.entry-grid .flip-back {
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.entry-desc {
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: var(--text2);
+  margin-bottom: 10px;
+}
+
+.entry-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+}
+
+.entry-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.74rem;
+  line-height: 1.65;
+  color: var(--text2);
+}
+
+.entry-foot {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  color: var(--text3);
+  font-size: 0.78rem;
+}
+
+.is-disabled {
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.idx-paths-section {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ───── 卡片过渡系统（雾化消融） ───── */
+.flip-container {
+  border-radius: var(--radius-lg);
+  background: var(--surface2);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flip-container:hover {
+  transform: translateY(-3px);
+}
+
+.flip-link {
+  text-decoration: none;
+  color: var(--text);
+  display: block;
+  outline: none;
+}
+
+.flip-inner {
+  display: grid;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface2);
+}
+
+.flip-front,
+.flip-back {
+  grid-area: 1 / 1;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 正面 — 默认可见，与背面同底色 */
+.flip-front {
+  background: var(--surface2);
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+  z-index: 2;
+}
+
+/* 背面：柔和底色 — 默认隐藏 */
+.flip-back {
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: var(--surface2);
+  opacity: 0;
+  filter: blur(6px);
+  transform: scale(0.97);
+  z-index: 1;
+}
+
+/* hover：正面雾化消散，背面浮现 */
+.flip-container:hover .flip-front {
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(1.03);
+}
+
+.flip-container:hover .flip-back {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+
+/* 下排路径卡片：与背面同底色 */
+.idx-paths-grid .flip-back {
+  background: var(--surface2);
+}
+
+/* ───── 正面：标题居中 ───── */
+.flip-front-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.flip-front-sub {
+  font-size: 0.75rem;
+  color: var(--text3);
+  margin-top: 6px;
+}
+
+/* ───── 背面：内容 ───── */
+.flip-back-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+/* ───── 三列 / 四列 网格 ───── */
+.idx-trio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+/* ───── 下半区：左右布局 ───── */
+.idx-bottom-layout {
+  display: flex;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.idx-paths-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.idx-knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  flex: 1;
+}
+
+.idx-knowledge-grid .flip-inner {
+  min-height: 170px;
+}
+
+.idx-knowledge-grid .flip-front,
+.idx-knowledge-grid .flip-back {
+  padding: 16px 14px;
+}
+
+.idx-knowledge-grid .flip-front {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.idx-knowledge-grid .flip-back {
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.kn-back-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+}
+
+.kn-back-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.74rem;
+  color: var(--text2);
+  line-height: 1.65;
+}
+
+.kn-back-list .idx-card-dot {
+  margin-top: 7px;
+}
+
+.idx-knowledge-grid .flip-front-title {
+  font-size: 1.12rem;
+}
+
+.idx-knowledge-grid .flip-back-title {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.idx-paths-sub {
+  font-size: 0.8rem;
+  color: var(--text3);
+}
+
+/* ───── 圆点列表 ───── */
+.idx-skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.idx-skill {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.idx-skill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.idx-skill strong {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text);
+  margin-bottom: 1px;
+}
+
+.idx-skill span {
+  font-size: 0.68rem;
+  color: var(--text3);
+  line-height: 1.4;
+}
+
+/* ───── 路径卡片背面列表 ───── */
+.idx-card-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.idx-card-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--text2);
+  line-height: 1.8;
+}
+
+.idx-card-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 7px;
+  opacity: 0.5;
+}
+
+/* ───── Responsive ───── */
+@media (max-width: 1024px) {
+  .idx-trio-grid {
+    grid-template-columns: 1fr;
+  }
+  .idx-bottom-layout {
+    flex-direction: column;
+  }
+  .idx-knowledge-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .entry-hero {
+    padding-top: 28px;
+  }
+  .entry-grid {
+    grid-template-columns: 1fr;
+  }
+  .idx-paths-grid {
+    grid-template-columns: 1fr;
+  }
+}

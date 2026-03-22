@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import KnowledgePage from '../../components/KnowledgePage.astro';
+import { domains } from '../../data/knowledge';
+
+const domain = domains.find((d) => d.id === 'frontier')!;
+---
+
+<BaseLayout title={`${domain.title} — 安静 · AI Lab`}>
+  <KnowledgePage domain={domain} backHref="/ai" backLabel="返回 AI Hub" />
+</BaseLayout>
