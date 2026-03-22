@@ -7,13 +7,13 @@ import { projects } from '../../../data/projects';
 const { hub, slug } = Astro.params;
 export function getStaticPaths() {
   return paths
-    .filter((path) => path.hub === 'ai-lab' || path.hub === 'finance')
+    .filter((path) => path.hub === 'cs' || path.hub === 'finance')
     .map((path) => ({
-      params: { hub: path.hub === 'ai-lab' ? 'ai' : 'finance', slug: path.id },
+      params: { hub: path.hub, slug: path.id },
     }));
 }
 
-const path = paths.find((p) => p.hub === (hub === 'ai' ? 'ai-lab' : hub) && p.id === slug);
+const path = paths.find((p) => p.hub === hub && p.id === slug);
 
 const themeMap: Record<string, 'accent' | 'green' | 'orange' | 'purple'> = {
   graduate: 'accent',
@@ -29,7 +29,7 @@ const themeMap: Record<string, 'accent' | 'green' | 'orange' | 'purple'> = {
 const theme = path ? themeMap[path.id] ?? 'accent' : 'accent';
 ---
 
-<BaseLayout title={path ? `${path.title} — 安静` : '未找到页面 — 安静'}>
+<BaseLayout title={path ? `${path.title} — 安静` : '未找到页面 — 安静'} hub={hub}>
   {path ? (
     <PathTimeline path={path} projects={projects} theme={theme} backHref={`/${hub}`} backLabel="返回赛道首页" />
   ) : (

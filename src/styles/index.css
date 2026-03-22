@@ -10,15 +10,21 @@
 }
 
 .entry-hero {
-  padding: 44px 0 12px;
-  max-width: 720px;
+  padding: 64px 0 32px;
+  text-align: center;
 }
 
 .entry-title {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.entry-title .gradient-text {
+  font-size: clamp(2.6rem, 5.5vw, 3.6rem);
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: var(--text);
 }
 
 .entry-subtitle {
@@ -36,6 +42,11 @@
 
 .entry-grid .flip-container {
   min-height: 220px;
+}
+
+.entry-grid .flip-front-title {
+  font-size: 1.8rem;
+  letter-spacing: 0.01em;
 }
 
 .entry-grid .flip-back {
@@ -168,7 +179,7 @@
 
 /* ───── 正面：标题居中 ───── */
 .flip-front-title {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: 0.02em;
 }
@@ -207,6 +218,20 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   flex-shrink: 0;
+}
+
+.idx-paths-grid .flip-inner {
+  min-height: 170px;
+}
+
+.idx-paths-grid .flip-front {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.idx-paths-grid .flip-front-title {
+  font-size: 1.4rem;
 }
 
 .idx-knowledge-grid {
@@ -259,7 +284,7 @@
 }
 
 .idx-knowledge-grid .flip-front-title {
-  font-size: 1.12rem;
+  font-size: 1.3rem;
 }
 
 .idx-knowledge-grid .flip-back-title {

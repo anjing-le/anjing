@@ -12,19 +12,18 @@ import {
 const hub = Astro.params.hub;
 export function getStaticPaths() {
   return [
-    { params: { hub: 'ai' } },
+    { params: { hub: 'cs' } },
     { params: { hub: 'finance' } },
   ];
 }
 
-
-const aiTrioCards = [
+const csTrioCards = [
   {
     title: '我是谁',
     color: 'var(--accent)',
     items: [
-      { dot: 'var(--accent)', label: '一线全栈&大模型应用工程师', desc: '专注 AI 应用落地与工程最佳实践' },
-      { dot: 'var(--cyan)', label: '4 个真实 AI 项目', desc: '电商客服、知识库 RAG、AIGC、工作流' },
+      { dot: 'var(--accent)', label: '一线全栈工程师', desc: '计算机基础 + 工程实践 + AI 应用落地' },
+      { dot: 'var(--cyan)', label: '4 个真实项目', desc: '电商客服、知识库 RAG、AIGC、工作流' },
       { dot: 'var(--pink)', label: '生产级交付', desc: '真实系统，不是 Demo' },
     ],
   },
@@ -32,9 +31,9 @@ const aiTrioCards = [
     title: '能给你什么',
     color: 'var(--purple)',
     items: [
-      { dot: 'var(--accent)', label: '传统工程', desc: '架构设计、最佳实践、性能优化' },
-      { dot: 'var(--purple)', label: 'LLM 应用', desc: 'LLM 基础、LLM 应用、Agent 架构设计' },
-      { dot: 'var(--orange)', label: 'LLM 前沿探索', desc: 'Agentic、OpenClaw' },
+      { dot: 'var(--accent)', label: '计算机基础', desc: '操作系统、网络、数据结构与算法' },
+      { dot: 'var(--purple)', label: '工程实践', desc: '架构设计、最佳实践、性能优化' },
+      { dot: 'var(--orange)', label: 'AI 应用', desc: 'LLM、RAG、Agent、前沿探索' },
     ],
   },
   {
@@ -48,55 +47,53 @@ const aiTrioCards = [
   },
 ];
 
-const aiPathCards = paths
-  .filter((p) => p.hub === 'ai-lab')
+const csPathCards = paths
+  .filter((p) => p.hub === 'cs')
   .map((p) => ({
     title: p.title,
     hook: p.subtitle,
     color: p.color,
-    href: `/ai/paths/${p.id}`,
+    href: `/cs/paths/${p.id}`,
     items: p.audience,
   }));
 
-const aiKnowledgeHooks: Record<string, string> = {
-  engineering: '基础决定上限',
-  'llm-basics': '理解决定精度',
-  'llm-apps': '落地决定价值',
-  frontier: '眼界决定方向',
+const csKnowledgeHooks: Record<string, string> = {
+  'cs-fundamentals': '基础决定上限',
+  engineering: '工程决定质量',
+  'ai-and-llm': '趋势决定方向',
+  frontier: '视野决定未来',
 };
 
-const aiKnowledgeCards = domains
-  .filter((d) => d.hub === 'ai-lab')
+const csKnowledgeCards = domains
+  .filter((d) => d.hub === 'cs')
   .map((d) => ({
     title: d.title,
-    hook: aiKnowledgeHooks[d.id] ?? d.subtitle,
+    hook: csKnowledgeHooks[d.id] ?? d.subtitle,
     color: d.color,
-    href: `/ai/knowledge/${d.id}`,
+    href: `/cs/knowledge/${d.id}`,
     items: d.groups.flatMap((group) => group.items.slice(0, 1).map((item) => item.title)).slice(0, 3),
   }));
 
 const hubs: Record<string, {
   title: string;
   subtitle: string;
-  introNote: string;
-  trioCards: typeof aiTrioCards | typeof financeTrioCards;
-  pathCards: typeof aiPathCards | typeof financePathCards;
-  knowledgeCards: typeof aiKnowledgeCards | typeof financeKnowledgeCards;
+  introNote?: string;
+  trioCards: typeof csTrioCards | typeof financeTrioCards;
+  pathCards: typeof csPathCards | typeof financePathCards;
+  knowledgeCards: typeof csKnowledgeCards | typeof financeKnowledgeCards;
   pathLead: string;
 }> = {
-  ai: {
-    title: '安静 · AI Hub',
-    subtitle: '大模型培训与应用实战',
-    introNote: '这一页保留你现在这套 AI 首页和子页的完整风格，后面只负责持续补内容。',
-    trioCards: aiTrioCards,
-    pathCards: aiPathCards,
-    knowledgeCards: aiKnowledgeCards,
+  cs: {
+    title: '安静 · 计算机',
+    subtitle: '基础 · 工程 · AI',
+    trioCards: csTrioCards,
+    pathCards: csPathCards,
+    knowledgeCards: csKnowledgeCards,
     pathLead: '选一个最像你的画像，我帮你规划一条路',
   },
   finance: {
     title: '安静 · 金融 Hub',
     subtitle: '交易、研究与长期配置',
-    introNote: '金融赛道会和 AI 赛道保持同样的结构与视觉，只是内容换成金融方向。',
     trioCards: financeTrioCards,
     pathCards: financePathCards,
     knowledgeCards: financeKnowledgeCards,
@@ -107,7 +104,7 @@ const hubs: Record<string, {
 const hubData = hubs[hub];
 ---
 
-<BaseLayout title={hubData ? `${hubData.title} — 安静` : '未找到页面 — 安静'}>
+<BaseLayout title={hubData ? `${hubData.title} — 安静` : '未找到页面 — 安静'} hub={hub}>
   {hubData ? (
     <HubHome
       title={hubData.title}
@@ -117,6 +114,8 @@ const hubData = hubs[hub];
       pathCards={hubData.pathCards}
       knowledgeCards={hubData.knowledgeCards}
       pathLead={hubData.pathLead}
+      backHref="/"
+      backLabel="返回总入口"
     />
   ) : (
     <div class="container" style="padding: 48px 0;">

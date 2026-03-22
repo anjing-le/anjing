@@ -22,12 +22,12 @@ interface LinkCard {
 }
 
 interface Props {
-  title: string;
-  subtitle: string;
+  title?: string;
+  subtitle?: string;
   backHref?: string;
   backLabel?: string;
   introNote?: string;
-  trioCards: TrioCard[];
+  trioCards?: TrioCard[];
   pathCards: LinkCard[];
   knowledgeCards: LinkCard[];
   pathLead: string;
@@ -39,47 +39,52 @@ const {
   backHref = '/',
   backLabel = '返回总入口',
   introNote,
-  trioCards,
+  trioCards = [],
   pathCards,
   knowledgeCards,
   pathLead,
 } = Astro.props;
+
+const showHero = !!(title || subtitle || introNote);
+const showTrio = trioCards.length > 0;
 ---
 
 <div class="container">
   <div class="idx-layout">
     <div class="hub-hero">
       <a href={backHref} class="hub-back">{backLabel}</a>
-      <h1 class="hub-title">{title}</h1>
-      <p class="hub-subtitle">{subtitle}</p>
-      {introNote ? <p class="hub-note">{introNote}</p> : null}
+      {title && <h1 class="hub-title">{title}</h1>}
+      {subtitle && <p class="hub-subtitle">{subtitle}</p>}
+      {introNote && <p class="hub-note">{introNote}</p>}
     </div>
 
-    <div class="idx-trio-grid">
-      {trioCards.map((card) => (
-        <div class="flip-container">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <h2 class="flip-front-title" style={`color:${card.color};`}>{card.title}</h2>
-            </div>
-            <div class="flip-back">
-              <h2 class="flip-back-title" style={`color:${card.color};`}>{card.title}</h2>
-              <div class="idx-skill-list">
-                {card.items.map((item) => (
-                  <div class="idx-skill">
-                    <div class="idx-skill-dot" style={`background:${item.dot};`}></div>
-                    <div>
-                      <strong>{item.label}</strong>
-                      <span>{item.desc}</span>
+    {showTrio && (
+      <div class="idx-trio-grid">
+        {trioCards.map((card) => (
+          <div class="flip-container">
+            <div class="flip-inner">
+              <div class="flip-front">
+                <h2 class="flip-front-title" style={`color:${card.color};`}>{card.title}</h2>
+              </div>
+              <div class="flip-back">
+                <h2 class="flip-back-title" style={`color:${card.color};`}>{card.title}</h2>
+                <div class="idx-skill-list">
+                  {card.items.map((item) => (
+                    <div class="idx-skill">
+                      <div class="idx-skill-dot" style={`background:${item.dot};`}></div>
+                      <div>
+                        <strong>{item.label}</strong>
+                        <span>{item.desc}</span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    )}
 
     <div class="idx-paths-section">
       <p class="idx-paths-sub">{pathLead}</p>
