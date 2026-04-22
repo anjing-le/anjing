@@ -7,7 +7,7 @@ import { projects } from '../../../data/projects';
 const { hub, slug } = Astro.params;
 export function getStaticPaths() {
   return paths
-    .filter((path) => path.hub === 'cs' || path.hub === 'finance')
+    .filter((path) => !!path.hub)
     .map((path) => ({
       params: { hub: path.hub, slug: path.id },
     }));
@@ -15,18 +15,16 @@ export function getStaticPaths() {
 
 const path = paths.find((p) => p.hub === hub && p.id === slug);
 
-const themeMap: Record<string, 'accent' | 'green' | 'orange' | 'purple'> = {
-  graduate: 'accent',
-  campus: 'green',
-  'career-change': 'orange',
-  advance: 'purple',
-  'short-term': 'accent',
-  swing: 'green',
-  'mid-term': 'orange',
-  'long-term': 'purple',
+const colorToTheme = (color: string): 'accent' | 'green' | 'orange' | 'purple' => {
+  if (color.includes('green')) return 'green';
+  if (color.includes('orange')) return 'orange';
+  if (color.includes('purple')) return 'purple';
+  if (color.includes('cyan')) return 'accent';
+  if (color.includes('pink')) return 'accent';
+  return 'accent';
 };
 
-const theme = path ? themeMap[path.id] ?? 'accent' : 'accent';
+const theme = path ? colorToTheme(path.color) : 'accent';
 ---
 
 <BaseLayout title={path ? `${path.title} — 安静` : '未找到页面 — 安静'} hub={hub}>

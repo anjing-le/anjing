@@ -29,7 +29,7 @@ export const financeTrioCards: HomeCard[] = [
     ],
   },
   {
-    title: '能给你什么',
+    title: '我能帮你什么',
     color: 'var(--purple)',
     items: [
       { dot: 'var(--accent)', label: '短线纪律', desc: '节奏、信号和止损' },
@@ -38,7 +38,7 @@ export const financeTrioCards: HomeCard[] = [
     ],
   },
   {
-    title: '我们的交付',
+    title: '你会收获什么',
     color: 'var(--green)',
     items: [
       { dot: 'var(--accent)', label: '策略框架', desc: '从观察到执行的完整链路' },
@@ -85,27 +85,27 @@ export const financeKnowledgeCards: HomeLinkCard[] = [
     hook: '理解市场的底层逻辑',
     color: 'var(--accent)',
     href: '/finance/knowledge/finance-theory',
-    items: ['资本市场', '金融工具', '估值理论'],
+    items: ['资本市场 · 理解市场结构和交易机制', '金融工具 · 股票、债券、基金与衍生品', '估值理论 · 从财务数据到估值框架'],
   },
   {
     title: '经济学',
     hook: '驱动市场的底层力量',
     color: 'var(--green)',
     href: '/finance/knowledge/economics',
-    items: ['宏观经济', '产业分析', '政策周期'],
+    items: ['宏观经济 · 经济周期、货币政策和利率', '产业分析 · 行业格局与竞争位置', '政策周期 · 政策变化如何影响市场'],
   },
   {
     title: '交易学',
     hook: '从观察到执行的方法',
     color: 'var(--orange)',
     href: '/finance/knowledge/trading',
-    items: ['技术分析', '策略体系', '交易心理'],
+    items: ['技术分析 · 通过价格和量能理解市场', '策略体系 · 从入场到退出的完整框架', '交易心理 · 控制情绪比控制仓位更重要'],
   },
   {
     title: '风险管理',
     hook: '先活下来再谈收益',
     color: 'var(--purple)',
     href: '/finance/knowledge/risk-management',
-    items: ['仓位风控', '组合管理', '复盘体系'],
+    items: ['仓位风控 · 用规则控制风险暴露', '组合管理 · 从单标的到组合视角', '复盘体系 · 把风险管理变成长期习惯'],
   },
 ];

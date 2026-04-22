@@ -4,11 +4,12 @@ import type { KnowledgeDomain } from '../data/knowledge';
 
 interface Props {
   domain: KnowledgeDomain;
+  contents?: Record<string, string>;
   backHref?: string;
   backLabel?: string;
 }
 
-const { domain, backHref = '/', backLabel = '返回首页' } = Astro.props;
+const { domain, contents = {}, backHref = '/', backLabel = '返回首页' } = Astro.props;
 
 const hasGroups = domain.groups.length > 0;
 const firstGroup = domain.groups[0];
@@ -73,9 +74,23 @@ const firstItem = firstGroup?.items[0];
                       data-group={group.id}
                       data-item={item.id}
                     >
-                      <div class="kn-doc-placeholder">
-                        <p>这里后续展示 Markdown 正文预览</p>
-                      </div>
+                      {contents[item.id] ? (
+                        <div class="kn-doc-content">
+                          <div class="kn-doc-header">
+                            <h2 class="kn-doc-title">{item.title}</h2>
+                            {item.summary && item.summary !== '待补充' && (
+                              <p class="kn-doc-summary">{item.summary}</p>
+                            )}
+                          </div>
+                          <div class="kn-prose" set:html={contents[item.id]} />
+                        </div>
+                      ) : (
+                        <div class="kn-doc-placeholder">
+                          <div class="kn-draft-icon"></div>
+                          <p class="kn-draft-title">{item.title}</p>
+                          <p>这篇内容正在整理中，稍后会在这里展示。</p>
+                        </div>
+                      )}
                     </article>
                   ))
                 )}
@@ -291,6 +306,162 @@ const firstItem = firstGroup?.items[0];
     to { opacity: 1; transform: translateY(0); }
   }
 
+  .kn-doc-content {
+    padding: 4px 6px;
+  }
+
+  .kn-doc-header {
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .kn-doc-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .kn-doc-summary {
+    font-size: 0.78rem;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .kn-prose {
+    font-size: 0.84rem;
+    line-height: 1.85;
+    color: var(--text);
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+
+  .kn-prose :global(h2) {
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 28px 0 10px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .kn-prose :global(h3) {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 22px 0 8px;
+    color: var(--text);
+  }
+
+  .kn-prose :global(h4) {
+    font-size: 0.84rem;
+    font-weight: 700;
+    margin: 18px 0 6px;
+    color: var(--text);
+  }
+
+  .kn-prose :global(p) {
+    margin: 0 0 12px;
+  }
+
+  .kn-prose :global(ul),
+  .kn-prose :global(ol) {
+    margin: 0 0 14px;
+    padding-left: 20px;
+  }
+
+  .kn-prose :global(li) {
+    margin-bottom: 4px;
+  }
+
+  .kn-prose :global(li::marker) {
+    color: var(--kn-color);
+  }
+
+  .kn-prose :global(strong) {
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .kn-prose :global(a) {
+    color: var(--kn-color);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .kn-prose :global(a:hover) {
+    border-bottom-color: var(--kn-color);
+  }
+
+  .kn-prose :global(code) {
+    font-size: 0.78rem;
+    background: var(--bg);
+    padding: 2px 6px;
+    border-radius: 5px;
+    color: var(--kn-color);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  .kn-prose :global(pre) {
+    margin: 0 0 16px;
+    padding: 14px 16px;
+    background: #2d2a28;
+    border-radius: 12px;
+    overflow-x: auto;
+    font-size: 0.76rem;
+    line-height: 1.7;
+  }
+
+  .kn-prose :global(pre code) {
+    background: none;
+    padding: 0;
+    color: #e8e0d8;
+    font-size: inherit;
+  }
+
+  .kn-prose :global(blockquote) {
+    margin: 0 0 14px;
+    padding: 10px 16px;
+    border-left: 3px solid var(--kn-color);
+    background: var(--kn-soft);
+    border-radius: 0 10px 10px 0;
+    font-size: 0.82rem;
+    color: var(--text2);
+  }
+
+  .kn-prose :global(blockquote p) {
+    margin: 0;
+  }
+
+  .kn-prose :global(hr) {
+    border: none;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.05);
+    margin: 24px 0;
+  }
+
+  .kn-prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 16px;
+    font-size: 0.78rem;
+  }
+
+  .kn-prose :global(th) {
+    text-align: left;
+    padding: 8px 10px;
+    background: var(--bg);
+    font-weight: 700;
+    color: var(--text);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .kn-prose :global(td) {
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+    color: var(--text2);
+  }
+
   .kn-doc-placeholder {
     min-height: 470px;
     border-radius: 14px;
@@ -303,6 +474,20 @@ const firstItem = firstGroup?.items[0];
     color: var(--text3);
     padding: 24px;
     text-align: center;
+  }
+
+  .kn-draft-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--kn-soft);
+    margin-bottom: 4px;
+  }
+
+  .kn-draft-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text2);
   }
 
   .kn-doc-placeholder p {
