@@ -342,4 +342,298 @@ export const domains: KnowledgeDomain[] = [
       },
     ],
   },
+
+  // ─── 身体 Hub ───
+  {
+    hub: 'body',
+    id: 'training',
+    title: '训练科学',
+    subtitle: '运动生理 / 训练编排 / 动作库',
+    description: '理解身体如何变强，用科学指导训练。',
+    icon: 'dumbbell',
+    color: 'var(--green)',
+    soft: 'var(--green-soft)',
+    groups: [
+      { id: 'train-physiology', title: '运动生理学', summary: '肌肉如何生长和适应。', items: [
+        { id: 'body-1', title: '肌肉生长原理', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-2', title: '能量系统', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'train-programming', title: '训练编排', summary: '组数、次数与周期化。', items: [
+        { id: 'body-3', title: '训练变量设计', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-4', title: '周期化训练', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'train-movements', title: '核心动作', summary: '深蹲、硬拉、推拉的要点。', items: [
+        { id: 'body-5', title: '复合动作详解', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-6', title: '孤立动作与辅助训练', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'body',
+    id: 'nutrition',
+    title: '营养学',
+    subtitle: '三大营养素 / 热量 / 补剂',
+    description: '吃对比练对更重要。',
+    icon: 'apple',
+    color: 'var(--accent)',
+    soft: 'var(--accent-soft)',
+    groups: [
+      { id: 'nutri-macro', title: '三大营养素', summary: '碳水、蛋白质、脂肪的作用。', items: [
+        { id: 'body-7', title: '蛋白质与肌肉', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-8', title: '碳水与脂肪', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'nutri-calorie', title: '热量管理', summary: '基础代谢和活动消耗。', items: [
+        { id: 'body-9', title: '热量计算方法', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-10', title: '饮食记录工具', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'nutri-supplement', title: '补剂常识', summary: '蛋白粉、肌酸、维生素。', items: [
+        { id: 'body-11', title: '常用补剂指南', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-12', title: '补剂的误区', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'body',
+    id: 'diet',
+    title: '饮食管理',
+    subtitle: '饮食结构 / 备餐 / 误区',
+    description: '把营养学变成一日三餐。',
+    icon: 'utensils',
+    color: 'var(--orange)',
+    soft: 'var(--orange-soft)',
+    groups: [
+      { id: 'diet-structure', title: '饮食结构', summary: '如何搭配每一餐。', items: [
+        { id: 'body-13', title: '一日三餐搭配', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-14', title: '增肌/减脂期饮食差异', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'diet-mealprep', title: '备餐方法', summary: '省时省力的实操方案。', items: [
+        { id: 'body-15', title: '一周备餐指南', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-16', title: '外食策略', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'diet-myths', title: '饮食误区', summary: '那些听起来对但其实错的。', items: [
+        { id: 'body-17', title: '常见饮食谣言', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-18', title: '极端饮食的危害', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'body',
+    id: 'recovery',
+    title: '恢复与心理',
+    subtitle: '睡眠 / 压力 / 运动心理',
+    description: '休息也是训练的一部分。',
+    icon: 'moon',
+    color: 'var(--purple)',
+    soft: 'var(--purple-soft)',
+    groups: [
+      { id: 'recovery-sleep', title: '睡眠科学', summary: '睡眠质量如何影响身体。', items: [
+        { id: 'body-19', title: '睡眠与恢复', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-20', title: '改善睡眠的方法', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'recovery-stress', title: '压力管理', summary: '皮质醇与体重的关系。', items: [
+        { id: 'body-21', title: '压力与身体的关系', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-22', title: '减压方法', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'recovery-mindset', title: '运动心理', summary: '坚持的底层逻辑。', items: [
+        { id: 'body-23', title: '动机与习惯', summary: '待补充', type: 'doc', draft: true },
+        { id: 'body-24', title: '突破平台期', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+
+  // ─── 摄影 Hub ───
+  {
+    hub: 'photo',
+    id: 'optics',
+    title: '光学基础',
+    subtitle: '曝光 / 镜头 / 传感器',
+    description: '理解相机在做什么。',
+    icon: 'camera',
+    color: 'var(--cyan)',
+    soft: 'var(--cyan-soft)',
+    groups: [
+      { id: 'optics-exposure', title: '曝光原理', summary: '光圈、快门、ISO 的关系。', items: [
+        { id: 'photo-1', title: '曝光三要素', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-2', title: '测光与曝光补偿', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'optics-lens', title: '镜头特性', summary: '焦距、景深与透视。', items: [
+        { id: 'photo-3', title: '焦距与视角', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-4', title: '景深控制', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'optics-sensor', title: '传感器', summary: '画幅、像素与动态范围。', items: [
+        { id: 'photo-5', title: '全画幅与残幅', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-6', title: '动态范围与噪点', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'photo',
+    id: 'composition',
+    title: '构图与视觉',
+    subtitle: '构图法则 / 视觉重量 / 减法',
+    description: '让画面会说话。',
+    icon: 'layout',
+    color: 'var(--green)',
+    soft: 'var(--green-soft)',
+    groups: [
+      { id: 'comp-classic', title: '经典构图', summary: '三分法、引导线、框架。', items: [
+        { id: 'photo-7', title: '构图法则详解', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-8', title: '打破规则的构图', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'comp-weight', title: '视觉重量', summary: '大小、颜色、位置的平衡。', items: [
+        { id: 'photo-9', title: '视觉重量与平衡', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-10', title: '留白的艺术', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'comp-minimal', title: '减法思维', summary: '画面里只留必要的元素。', items: [
+        { id: 'photo-11', title: '减法构图', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-12', title: '主体与背景的关系', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'photo',
+    id: 'lighting',
+    title: '光线与色彩',
+    subtitle: '自然光 / 人造光 / 色彩理论',
+    description: '摄影就是用光写作。',
+    icon: 'sun',
+    color: 'var(--purple)',
+    soft: 'var(--purple-soft)',
+    groups: [
+      { id: 'light-natural', title: '自然光', summary: '不同时段和天气的光线特征。', items: [
+        { id: 'photo-13', title: '黄金时段与蓝调时刻', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-14', title: '阴天和室内自然光', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'light-artificial', title: '人造光', summary: '闪光灯和持续光的基本用法。', items: [
+        { id: 'photo-15', title: '闪光灯基础', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-16', title: '布光方案', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'light-color', title: '色彩理论', summary: '色温、互补色与色调统一。', items: [
+        { id: 'photo-17', title: '色温与白平衡', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-18', title: '色彩搭配与情绪', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'photo',
+    id: 'post',
+    title: '后期处理',
+    subtitle: 'RAW / 调色 / 工作流',
+    description: '让照片完成最后一步。',
+    icon: 'sliders',
+    color: 'var(--orange)',
+    soft: 'var(--orange-soft)',
+    groups: [
+      { id: 'post-raw', title: 'RAW 处理', summary: '为什么不应该只拍 JPG。', items: [
+        { id: 'photo-19', title: 'RAW vs JPG', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-20', title: 'RAW 基本调整', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'post-grading', title: '调色逻辑', summary: '从校正到风格化的思路。', items: [
+        { id: 'photo-21', title: '色彩校正', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-22', title: '风格化调色', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'post-workflow', title: '批量工作流', summary: '高效处理大量照片。', items: [
+        { id: 'photo-23', title: '预设制作与应用', summary: '待补充', type: 'doc', draft: true },
+        { id: 'photo-24', title: '批量导出与管理', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+
+  // ─── 美食 Hub ───
+  {
+    hub: 'food',
+    id: 'map',
+    title: '美食地图',
+    subtitle: '探店 / 品类 / 隐藏菜单',
+    description: '值得专程去吃的地方。',
+    icon: 'map-pin',
+    color: 'var(--orange)',
+    soft: 'var(--orange-soft)',
+    groups: [
+      { id: 'map-city', title: '城市探店', summary: '各城市值得去的餐厅和小店。', items: [
+        { id: 'food-1', title: '本地美食推荐', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-2', title: '旅行美食攻略', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'map-category', title: '品类指南', summary: '火锅、烧烤、小吃的推荐。', items: [
+        { id: 'food-3', title: '火锅指南', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-4', title: '街头小吃', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'map-hidden', title: '隐藏菜单', summary: '本地人才知道的吃法。', items: [
+        { id: 'food-5', title: '隐藏吃法合集', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-6', title: '点单技巧', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'food',
+    id: 'cooking',
+    title: '烹饪原理',
+    subtitle: '热传递 / 调味 / 食材处理',
+    description: '知道为什么才能做得更好。',
+    icon: 'flame',
+    color: 'var(--green)',
+    soft: 'var(--green-soft)',
+    groups: [
+      { id: 'cook-heat', title: '热传递', summary: '煎炒烤炸蒸煮背后的科学。', items: [
+        { id: 'food-7', title: '烹饪方式与热传递', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-8', title: '美拉德反应', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'cook-seasoning', title: '调味逻辑', summary: '咸甜酸辣鲜的搭配规则。', items: [
+        { id: 'food-9', title: '基础调味公式', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-10', title: '复合调味技巧', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'cook-prep', title: '食材处理', summary: '切法、腌制和预处理技巧。', items: [
+        { id: 'food-11', title: '食材预处理', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-12', title: '腌制与入味', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'food',
+    id: 'ingredients',
+    title: '食材百科',
+    subtitle: '蔬果 / 肉蛋 / 调料',
+    description: '认识你盘子里的每样东西。',
+    icon: 'leaf',
+    color: 'var(--accent)',
+    soft: 'var(--accent-soft)',
+    groups: [
+      { id: 'ingr-veggie', title: '蔬菜水果', summary: '时令选择和保存方法。', items: [
+        { id: 'food-13', title: '时令蔬果表', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-14', title: '蔬果保存方法', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'ingr-protein', title: '肉蛋水产', summary: '部位区别和烹饪适配。', items: [
+        { id: 'food-15', title: '猪牛羊部位指南', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-16', title: '海鲜选购与处理', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'ingr-spice', title: '调料香料', summary: '常用调味料的特点和用法。', items: [
+        { id: 'food-17', title: '基础调味料', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-18', title: '香料入门', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'food',
+    id: 'culture',
+    title: '饮食文化',
+    subtitle: '地域 / 礼仪 / 历史',
+    description: '食物背后的故事。',
+    icon: 'book-open',
+    color: 'var(--purple)',
+    soft: 'var(--purple-soft)',
+    groups: [
+      { id: 'culture-regional', title: '地域饮食', summary: '八大菜系和地方特色。', items: [
+        { id: 'food-19', title: '八大菜系概览', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-20', title: '地方特色小吃', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'culture-etiquette', title: '饮食礼仪', summary: '中西餐桌的基本规矩。', items: [
+        { id: 'food-21', title: '中式餐桌礼仪', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-22', title: '西式用餐礼仪', summary: '待补充', type: 'doc', draft: true },
+      ]},
+      { id: 'culture-history', title: '食物历史', summary: '那些菜是怎么来的。', items: [
+        { id: 'food-23', title: '经典菜的起源', summary: '待补充', type: 'doc', draft: true },
+        { id: 'food-24', title: '饮食变迁', summary: '待补充', type: 'doc', draft: true },
+      ]},
+    ],
+  },
 ];

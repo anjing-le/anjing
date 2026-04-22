@@ -6,18 +6,36 @@ import { domains } from '../../../data/knowledge';
 const { hub, slug } = Astro.params;
 export function getStaticPaths() {
   return domains
-    .filter((domain) => domain.hub === 'cs' || domain.hub === 'finance')
+    .filter((domain) => !!domain.hub)
     .map((domain) => ({
       params: { hub: domain.hub, slug: domain.id },
     }));
 }
 
 const domain = domains.find((d) => d.hub === hub && d.id === slug);
+
+const mdModules = import.meta.glob<{ compiledContent: () => string; frontmatter: Record<string, any> }>(
+  '/src/content/knowledge/**/*.md',
+  { eager: true }
+);
+
+const contents: Record<string, string> = {};
+if (domain) {
+  for (const group of domain.groups) {
+    for (const item of group.items) {
+      const key = `/src/content/knowledge/${domain.hub}/${domain.id}/${item.id}.md`;
+      const mod = mdModules[key];
+      if (mod?.compiledContent) {
+        contents[item.id] = mod.compiledContent();
+      }
+    }
+  }
+}
 ---
 
 <BaseLayout title={domain ? `${domain.title} — 安静` : '未找到页面 — 安静'} hub={hub}>
   {domain ? (
-    <KnowledgePage domain={domain} backHref={`/${hub}`} backLabel="返回赛道首页" />
+    <KnowledgePage domain={domain} contents={contents} backHref={`/${hub}`} backLabel="返回赛道首页" />
   ) : (
     <div class="container" style="padding: 48px 0;">
       <p>这个知识域还没有配置。</p>

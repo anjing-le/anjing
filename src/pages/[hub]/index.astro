@@ -8,12 +8,30 @@ import {
   financePathCards,
   financeKnowledgeCards,
 } from '../../data/finance-home';
+import {
+  bodyTrioCards,
+  bodyPathCards,
+  bodyKnowledgeCards,
+} from '../../data/body-home';
+import {
+  photoTrioCards,
+  photoPathCards,
+  photoKnowledgeCards,
+} from '../../data/photo-home';
+import {
+  foodTrioCards,
+  foodPathCards,
+  foodKnowledgeCards,
+} from '../../data/food-home';
 
 const hub = Astro.params.hub;
 export function getStaticPaths() {
   return [
     { params: { hub: 'cs' } },
     { params: { hub: 'finance' } },
+    { params: { hub: 'body' } },
+    { params: { hub: 'photo' } },
+    { params: { hub: 'food' } },
   ];
 }
 
@@ -28,7 +46,7 @@ const csTrioCards = [
     ],
   },
   {
-    title: '能给你什么',
+    title: '我能帮你什么',
     color: 'var(--purple)',
     items: [
       { dot: 'var(--accent)', label: '计算机基础', desc: '操作系统、网络、数据结构与算法' },
@@ -37,7 +55,7 @@ const csTrioCards = [
     ],
   },
   {
-    title: '我们的交付',
+    title: '你会收获什么',
     color: 'var(--green)',
     items: [
       { dot: 'var(--accent)', label: '完整项目代码', desc: '企业级标准，不是玩具' },
@@ -71,33 +89,39 @@ const csKnowledgeCards = domains
     hook: csKnowledgeHooks[d.id] ?? d.subtitle,
     color: d.color,
     href: `/cs/knowledge/${d.id}`,
-    items: d.groups.flatMap((group) => group.items.slice(0, 1).map((item) => item.title)).slice(0, 3),
+    items: d.groups.map((group) => `${group.title} · ${group.summary}`).slice(0, 3),
   }));
 
-const hubs: Record<string, {
-  title: string;
-  subtitle: string;
-  introNote?: string;
-  trioCards: typeof csTrioCards | typeof financeTrioCards;
-  pathCards: typeof csPathCards | typeof financePathCards;
-  knowledgeCards: typeof csKnowledgeCards | typeof financeKnowledgeCards;
-  pathLead: string;
-}> = {
+const hubs: Record<string, any> = {
   cs: {
-    title: '安静 · 计算机',
-    subtitle: '基础 · 工程 · AI',
     trioCards: csTrioCards,
     pathCards: csPathCards,
     knowledgeCards: csKnowledgeCards,
-    pathLead: '选一个最像你的画像，我帮你规划一条路',
+    pathLead: '',
   },
   finance: {
-    title: '安静 · 金融 Hub',
-    subtitle: '交易、研究与长期配置',
     trioCards: financeTrioCards,
     pathCards: financePathCards,
     knowledgeCards: financeKnowledgeCards,
-    pathLead: '把金融赛道拆成不同交易画像，从短线到长线逐步展开',
+    pathLead: '',
+  },
+  body: {
+    trioCards: bodyTrioCards,
+    pathCards: bodyPathCards,
+    knowledgeCards: bodyKnowledgeCards,
+    pathLead: '',
+  },
+  photo: {
+    trioCards: photoTrioCards,
+    pathCards: photoPathCards,
+    knowledgeCards: photoKnowledgeCards,
+    pathLead: '',
+  },
+  food: {
+    trioCards: foodTrioCards,
+    pathCards: foodPathCards,
+    knowledgeCards: foodKnowledgeCards,
+    pathLead: '',
   },
 };
 

@@ -6,7 +6,7 @@
   padding: 32px 0 24px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
 }
 
 .entry-hero {
@@ -41,7 +41,7 @@
 }
 
 .entry-grid .flip-container {
-  min-height: 260px;
+  min-height: 160px;
 }
 
 .entry-grid .flip-front-title {
@@ -53,8 +53,8 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 28px 24px;
-  gap: 10px;
+  padding: 18px 20px;
+  gap: 6px;
 }
 
 .entry-desc {
@@ -94,11 +94,39 @@
   opacity: 0.55;
 }
 
-.idx-paths-section {
-  margin-top: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* ───── 区块色块系统 ───── */
+.hub-zone {
+  border-radius: var(--radius-lg);
+  padding: 0;
+}
+
+.hub-zone-label {
+  display: none;
+}
+
+.hub-zone--intro {
+  background: transparent;
+}
+
+.hub-zone--intro .flip-container,
+.hub-zone--intro .flip-inner,
+.hub-zone--intro .flip-front,
+.hub-zone--intro .flip-back {
+  background: rgba(126,184,220,0.03);
+}
+
+.hub-zone--paths .flip-container,
+.hub-zone--paths .flip-inner,
+.hub-zone--paths .flip-front,
+.hub-zone--paths .flip-back {
+  background: rgba(126,200,160,0.03);
+}
+
+.hub-zone--knowledge .flip-container,
+.hub-zone--knowledge .flip-inner,
+.hub-zone--knowledge .flip-front,
+.hub-zone--knowledge .flip-back {
+  background: rgba(184,160,216,0.03);
 }
 
 /* ───── 卡片过渡系统（雾化消融） ───── */
@@ -209,9 +237,18 @@
 
 /* ───── 下半区：左右布局 ───── */
 .idx-bottom-layout {
-  display: flex;
-  gap: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
   align-items: stretch;
+}
+
+.hub-zone--paths {
+  grid-column: 1 / 2;
+}
+
+.hub-zone--knowledge {
+  grid-column: 2 / 4;
 }
 
 .idx-paths-grid {
@@ -222,7 +259,7 @@
 }
 
 .idx-paths-grid .flip-inner {
-  min-height: 170px;
+  min-height: 130px;
 }
 
 .idx-paths-grid .flip-front {
@@ -243,12 +280,12 @@
 }
 
 .idx-knowledge-grid .flip-inner {
-  min-height: 170px;
+  min-height: 130px;
 }
 
 .idx-knowledge-grid .flip-front,
 .idx-knowledge-grid .flip-back {
-  padding: 16px 14px;
+  padding: 14px 14px;
 }
 
 .idx-knowledge-grid .flip-front {
@@ -289,13 +326,12 @@
 }
 
 .idx-knowledge-grid .flip-back-title {
-  margin-bottom: 8px;
-  font-size: 0.9rem;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
 }
 
 .idx-paths-sub {
-  font-size: 0.8rem;
-  color: var(--text3);
+  display: none;
 }
 
 /* ───── 圆点列表 ───── */
@@ -373,7 +409,11 @@
     grid-template-columns: 1fr;
   }
   .idx-bottom-layout {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+  .hub-zone--paths,
+  .hub-zone--knowledge {
+    grid-column: auto;
   }
   .idx-knowledge-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -389,5 +429,8 @@
   }
   .idx-paths-grid {
     grid-template-columns: 1fr;
+  }
+  .hub-zone {
+    padding: 16px 14px;
   }
 }

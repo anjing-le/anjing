@@ -59,36 +59,37 @@ const showTrio = trioCards.length > 0;
     </div>
 
     {showTrio && (
-      <div class="idx-trio-grid">
-        {trioCards.map((card) => (
-          <div class="flip-container">
-            <div class="flip-inner">
-              <div class="flip-front">
-                <h2 class="flip-front-title" style={`color:${card.color};`}>{card.title}</h2>
-              </div>
-              <div class="flip-back">
-                <h2 class="flip-back-title" style={`color:${card.color};`}>{card.title}</h2>
-                <div class="idx-skill-list">
-                  {card.items.map((item) => (
-                    <div class="idx-skill">
-                      <div class="idx-skill-dot" style={`background:${item.dot};`}></div>
-                      <div>
-                        <strong>{item.label}</strong>
-                        <span>{item.desc}</span>
+      <div class="hub-zone hub-zone--intro">
+        <div class="idx-trio-grid">
+          {trioCards.map((card) => (
+            <div class="flip-container">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <h2 class="flip-front-title" style={`color:${card.color};`}>{card.title}</h2>
+                </div>
+                <div class="flip-back">
+                  <h2 class="flip-back-title" style={`color:${card.color};`}>{card.title}</h2>
+                  <div class="idx-skill-list">
+                    {card.items.map((item) => (
+                      <div class="idx-skill">
+                        <div class="idx-skill-dot" style={`background:${item.dot};`}></div>
+                        <div>
+                          <strong>{item.label}</strong>
+                          <span>{item.desc}</span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     )}
 
-    <div class="idx-paths-section">
-      <p class="idx-paths-sub">{pathLead}</p>
-      <div class="idx-bottom-layout">
+    <div class="idx-bottom-layout">
+      <div class="hub-zone hub-zone--paths">
         <div class="idx-paths-grid">
           {pathCards.map((card) => (
             <a href={card.href} class="flip-container flip-link">
@@ -108,7 +109,9 @@ const showTrio = trioCards.length > 0;
             </a>
           ))}
         </div>
+      </div>
 
+      <div class="hub-zone hub-zone--knowledge">
         <div class="idx-knowledge-grid">
           {knowledgeCards.map((card) => (
             <a href={card.href} class="flip-container flip-link">
