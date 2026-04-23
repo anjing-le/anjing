@@ -40,19 +40,53 @@
 │   │   └── frontier           前沿探索
 │   └── /cs/projects/*         ← 项目页（保留旧路由兼容）
 │
-├── /finance                   ← 金融 Hub 首页（与计算机 Hub 完全同结构）
+├── /finance                   ← 金融 Hub 首页
 │   ├── /finance/paths/:slug   ← 4 个画像路径页
 │   │   ├── short-term         短线交易
 │   │   ├── swing              中短线波段
 │   │   ├── mid-term           中线策略
 │   │   └── long-term          长线配置
 │   └── /finance/knowledge/:slug ← 4 个知识域页
-│       ├── market-basics      市场基础
-│       ├── technical-analysis 技术分析
-│       ├── fundamental-analysis 基本面研究
-│       └── risk-management    风控与仓位
+│       ├── finance-theory     金融学
+│       ├── economics          经济学
+│       ├── trading            交易学
+│       └── risk-management    风险管理
 │
-└── 更多赛道（总入口预留占位，href="#"，置灰不可点）
+├── /body                      ← 身体 Hub 首页
+│   ├── /body/paths/:slug      ← 4 个画像路径页
+│   │   ├── muscle             增肌塑形
+│   │   ├── fat-loss           减脂瘦身
+│   │   ├── posture            体态改善
+│   │   └── maintain           长期维护
+│   └── /body/knowledge/:slug  ← 4 个知识域页
+│       ├── training           训练科学
+│       ├── nutrition          营养学
+│       ├── diet               饮食管理
+│       └── recovery           恢复与心理
+│
+├── /photo                     ← 摄影 Hub 首页
+│   ├── /photo/paths/:slug     ← 4 个画像路径页
+│   │   ├── beginner           零基础入门
+│   │   ├── intermediate       进阶提升
+│   │   ├── creative           专题创作
+│   │   └── editing            后期修图
+│   └── /photo/knowledge/:slug ← 4 个知识域页
+│       ├── optics             光学基础
+│       ├── composition        构图与视觉
+│       ├── lighting           光线与色彩
+│       └── post               后期处理
+│
+└── /food                      ← 美食 Hub 首页
+    ├── /food/paths/:slug      ← 4 个画像路径页
+    │   ├── beginner           厨房入门
+    │   ├── home-cook          家常进阶
+    │   ├── baking             烘焙甜点
+    │   └── world              异国料理
+    └── /food/knowledge/:slug  ← 4 个知识域页
+        ├── map                美食地图
+        ├── cooking            烹饪原理
+        ├── ingredients        食材百科
+        └── culture            饮食文化
 ```
 
 ### 路由实现方式
@@ -201,7 +235,7 @@ anjing-site/src/
 ├── pages/
 │   ├── index.astro                       # 总入口："你好，我是安静"
 │   ├── [hub]/
-│   │   ├── index.astro                   # Hub 首页（计算机 / 金融共用模板）
+│   │   ├── index.astro                   # Hub 首页（5 个 Hub 共用模板）
 │   │   ├── paths/[slug].astro            # 画像路径页（动态路由）
 │   │   └── knowledge/[slug].astro        # 知识域页（动态路由）
 │   ├── paths/                            # 旧计算机路径页（兼容保留）
@@ -232,10 +266,13 @@ anjing-site/src/
 │   ├── global.css                        # 全局样式 + CSS 变量
 │   └── index.css                         # 总入口 + Hub 首页样式（含雾化消融系统）
 └── data/
-    ├── hubs.ts                           # 总入口赛道列表
-    ├── paths.ts                          # 所有画像路径（计算机 4 + 金融 4，按 hub 字段区分）
-    ├── knowledge.ts                      # 所有知识域（计算机 4 + 金融 4，按 hub 字段区分）
+    ├── hubs.ts                           # 总入口列表（5 个：cs/finance/body/photo/food）
+    ├── paths.ts                          # 所有画像路径（5 Hub × 4 = 20 条，按 hub 字段区分）
+    ├── knowledge.ts                      # 所有知识域（5 Hub × 4 = 20 个，按 hub 字段区分）
     ├── finance-home.ts                   # 金融 Hub 首页翻转卡片数据
+    ├── body-home.ts                      # 身体 Hub 首页翻转卡片数据
+    ├── photo-home.ts                     # 摄影 Hub 首页翻转卡片数据
+    ├── food-home.ts                      # 美食 Hub 首页翻转卡片数据
     ├── projects.ts                       # 项目数据（目前仅计算机赛道）
     └── site.ts                           # 全局配置（hub / CDN 路径）
 ```
@@ -274,7 +311,7 @@ anjing-site/src/
 
 ```typescript
 {
-  hub: string;           // 'cs' | 'finance'
+  hub: string;           // 'cs' | 'finance' | 'body' | 'photo' | 'food'
   id: string;
   title: string;
   subtitle: string;
@@ -300,7 +337,7 @@ anjing-site/src/
 
 | 组件 | 用途 | 被谁使用 |
 |------|------|----------|
-| `HubHome` | Hub 首页渲染（三列翻转卡 + 画像入口 + 知识入口） | `/cs` `/finance` |
+| `HubHome` | Hub 首页渲染（三列翻转卡 + 画像入口 + 知识入口） | `/cs` `/finance` `/body` `/photo` `/food` |
 | `PathTimeline` | 水平时间线 + 点击切换资源面板 | 所有画像路径页 |
 | `KnowledgePage` | 左目录右内容的知识详情 | 所有知识域页 |
 | `BaseLayout` | 全局 HTML 壳（head + main + Footer） | 所有页面 |
@@ -334,17 +371,20 @@ anjing-site/src/
 | 模块 | 状态 | 说明 |
 |------|------|------|
 | 多 Hub 架构 | ✅ | 三层路由（总入口 → Hub → 子页），动态路由 + `getStaticPaths` |
-| 总入口首页 | ✅ | "你好，我是安静" + 赛道卡片（计算机 / 金融 / 更多预留） |
-| 计算机 Hub 首页 | ✅ | 三列翻转卡 + 4 画像 + 4 知识入口，暖粉色调 |
-| 计算机画像路径 ×4 | ✅ | 考研 / 校招 / 转行 / 进阶，水平时间线 + 资源面板 |
-| 计算机知识域 ×4 | ✅ | 计算机基础 / 工程实践 / AI 与大模型 / 前沿探索 |
+| 总入口首页 | ✅ | "你好，我是安静" + 5 个入口卡片（计算机/金融/身体/摄影/美食） |
+| 计算机 Hub | ✅ | 三列翻转卡 + 4 画像 + 4 知识入口，暖粉色调 |
+| 金融 Hub | ✅ | 同结构，金融学/经济学/交易学/风险管理 |
+| 身体 Hub | ✅ | 增肌/减脂/体态/维护 + 训练/营养/饮食/恢复 |
+| 摄影 Hub | ✅ | 入门/进阶/创作/后期 + 光学/构图/光线/后期 |
+| 美食 Hub | ✅ | 厨房入门/家常/烘焙/异国 + 美食地图/烹饪/食材/文化 |
 | 项目页 ×4 | ✅ | knowledge / aigc / customer-service / scaffolding |
-| 金融 Hub 首页 | ✅ | 与计算机 Hub 同结构，淡金色调，内容为金融方向 |
-| 金融画像路径 ×4 | ✅ | 短线 / 波段 / 中线 / 长线 |
-| 金融知识域 ×4 | ✅ | 金融学 / 经济学 / 交易学 / 风险管理 |
+| Hub 首页三区色块 | ✅ | 指引区（淡蓝）、路径区（淡绿）、知识区（淡紫），三列 grid 对齐 |
+| Markdown 内容管线 | ✅ | `import.meta.glob` 加载 md → KnowledgePage 渲染，prose 排版 |
+| 金融交易学内容 ×6 | ✅ | K线形态/量价均线/入场止损/持有退出/情绪纪律/认知偏差 |
+| Favicon | ✅ | 蝴蝶图标（SVG），替换原粉紫字母 A |
 | 雾化消融效果 | ✅ | 全站统一卡片交互 |
-| 样式系统 | ✅ | CSS 变量、暖粉调色板、响应式 |
-| 构建验证 | ✅ | 31 页全部构建通过 |
+| 样式系统 | ✅ | CSS 变量、暖粉调色板、响应式、区块色块系统 |
+| 构建验证 | ✅ | 58 页全部构建通过 |
 | `.gitignore` | ✅ | 已配置 |
 | Cloudflare Pages | ✅ | 已部署，`anjing.cc` + `anjing-3ik.pages.dev`，自动部署已开启 |
 | 域名购买 & 绑定 | ✅ | `anjing.cc`，Cloudflare Registrar，DNS/SSL 自动配置 |
@@ -354,17 +394,15 @@ anjing-site/src/
 
 | 模块 | 状态 | 说明 |
 |------|------|------|
-| 金融知识域内容 | 🔲 | 所有 KnowledgeItem 都是 `draft: true`，待填充 |
+| 金融风险管理内容 ×6 | 🔲 | `knowledge.ts` 中 `risk-management` 的 6 个条目待填充 md |
+| 金融其他知识域内容 | 🔲 | 金融学、经济学的 KnowledgeItem 都是 `draft: true` |
 | 计算机知识域内容 | 🔲 | 同上 |
-| Hub 首页文案 | 🔲 | "我是谁"等翻转卡片文案待用户确认定稿 |
+| 身体/摄影/美食知识域内容 | 🔲 | 同上，全部 `draft: true` |
 | Footer 引流内容 | 🔲 | 3 个 promo-card 内容待填充 |
 | 微信二维码 | 🔲 | 当前为占位框，待替换真实图片 |
-| Logo | 🔲 | 待用户提供 |
 | Header 导航栏 | 🔲 | 组件已有，当前未启用 |
 | CDN 静态资源加速 | 🔲 | `public/assets/hubs/` 目录已预留 |
-| Markdown 正文渲染 | 🔲 | 知识域详情页右侧目前显示"后续展示 Markdown 正文预览" |
 | 视频嵌入 | 🔲 | 数据结构已支持 `embedUrl`，渲染逻辑待实现 |
-| 更多赛道 | 🔲 | 总入口已预留占位，按上述步骤即可扩展 |
 | 旧路由清理 | 🔲 | `/paths/*` `/knowledge/*` 旧路由仍保留，可在确认无外部引用后删除 |
 
 ---
