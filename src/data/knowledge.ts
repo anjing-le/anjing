@@ -1,9 +1,16 @@
+export interface KnowledgeSlide {
+  url: string;
+  alt?: string;
+}
+
 export interface KnowledgeItem {
   id: string;
   title: string;
   summary: string;
   type: 'doc' | 'video';
   draft?: boolean;
+  cover?: string;
+  slides?: KnowledgeSlide[];
   mdPath?: string;
   coverUrl?: string;
   externalUrl?: string;

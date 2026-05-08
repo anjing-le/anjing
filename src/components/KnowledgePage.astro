@@ -11,9 +11,8 @@ interface Props {
 
 const { domain, contents = {}, backHref = '/', backLabel = '返回首页' } = Astro.props;
 
-const hasGroups = domain.groups.length > 0;
-const firstGroup = domain.groups[0];
-const firstItem = firstGroup?.items[0];
+const allItems = domain.groups.flatMap((g) => g.items);
+const firstItem = allItems[0];
 ---
 
 <div class="kn-page" style={`--kn-color: ${domain.color}; --kn-soft: ${domain.soft}`}>
@@ -36,110 +35,183 @@ const firstItem = firstGroup?.items[0];
 
   <section class="section">
     <div class="container">
-      {hasGroups ? (
-        <div class="kn-layout">
-          <aside class="kn-nav">
-            {domain.groups.map((group, groupIndex) => (
-              <section class="kn-section-block">
-                <div class="kn-section-head">
-                  <h2 class="kn-section-title">{group.title}</h2>
-                  <p class="kn-section-desc">{group.summary}</p>
-                </div>
-
-                <div class="kn-item-list">
-                  {group.items.map((item, itemIndex) => (
-                    <button
-                      class={`kn-item-btn${groupIndex === 0 && itemIndex === 0 ? ' active' : ''}`}
-                      type="button"
-                      data-group={group.id}
-                      data-item={item.id}
-                    >
-                      <span class="kn-item-bullet"></span>
-                      <span class="kn-item-title">{item.title}</span>
-                    </button>
-                  ))}
-                </div>
-              </section>
+      {allItems.length > 0 ? (
+        <div class="kn-stage">
+          {/* 左侧：标题列表 */}
+          <nav class="kn-tabs">
+            {allItems.map((item, idx) => (
+              <button
+                class={`kn-tab${idx === 0 ? ' active' : ''}`}
+                type="button"
+                data-item={item.id}
+              >
+                <span class="kn-tab-idx">{String(idx + 1).padStart(2, '0')}</span>
+                <span class="kn-tab-title">{item.title}</span>
+              </button>
             ))}
-          </aside>
+          </nav>
 
-          <section class="kn-detail" data-kn-detail>
-            {firstItem ? (
-              <div class="kn-panels">
-                {domain.groups.map((group) =>
-                  group.items.map((item, itemIndex) => (
-                    <article
-                      class={`kn-panel${group.id === firstGroup?.id && item.id === firstItem.id ? ' active' : ''}`}
-                      data-panel
-                      data-group={group.id}
-                      data-item={item.id}
-                    >
-                      {contents[item.id] ? (
-                        <div class="kn-doc-content">
-                          <div class="kn-doc-header">
-                            <h2 class="kn-doc-title">{item.title}</h2>
-                            {item.summary && item.summary !== '待补充' && (
-                              <p class="kn-doc-summary">{item.summary}</p>
-                            )}
+          {/* 中间：卡片主体 */}
+          <div class="kn-viewer" data-kn-detail>
+            <div class="kn-panels">
+              {allItems.map((item, idx) => {
+                const isFirst = idx === 0;
+                const hasSlides = item.cover || (item.slides && item.slides.length > 0);
+                const allSlides = [
+                  ...(item.cover ? [{ url: item.cover, alt: item.title + ' 封面' }] : []),
+                  ...(item.slides || []),
+                ];
+                const hasMd = !!contents[item.id];
+
+                return (
+                  <article
+                    class={`kn-panel${isFirst ? ' active' : ''}`}
+                    data-panel
+                    data-item={item.id}
+                  >
+                    {hasSlides ? (
+                      <div class="kn-carousel" data-carousel>
+                        <div class="kn-carousel-viewport">
+                          <div class="kn-carousel-track" data-track>
+                            {allSlides.map((slide, i) => (
+                              <div class={`kn-slide${i === 0 ? ' active' : ''}`} data-slide={i}>
+                                <img src={slide.url} alt={slide.alt || item.title} loading="lazy" draggable="false" />
+                              </div>
+                            ))}
                           </div>
-                          <div class="kn-prose" set:html={contents[item.id]} />
+                          {allSlides.length > 1 && (
+                            <>
+                              <button class="kn-carousel-btn kn-carousel-prev" data-prev aria-label="上一张">
+                                <Icon name="chevron-left" size={20} strokeWidth={2} />
+                              </button>
+                              <button class="kn-carousel-btn kn-carousel-next" data-next aria-label="下一张">
+                                <Icon name="chevron-right" size={20} strokeWidth={2} />
+                              </button>
+                            </>
+                          )}
                         </div>
-                      ) : (
-                        <div class="kn-doc-placeholder">
-                          <div class="kn-draft-icon"></div>
-                          <p class="kn-draft-title">{item.title}</p>
-                          <p>这篇内容正在整理中，稍后会在这里展示。</p>
+                        {allSlides.length > 1 && (
+                          <div class="kn-carousel-dots" data-dots>
+                            {allSlides.map((_, i) => (
+                              <button class={`kn-dot${i === 0 ? ' active' : ''}`} data-dot={i} aria-label={`第 ${i + 1} 张`} />
+                            ))}
+                          </div>
+                        )}
+                        <div class="kn-carousel-counter">
+                          <span data-current>1</span> / {allSlides.length}
                         </div>
-                      )}
-                    </article>
-                  ))
+                      </div>
+                    ) : hasMd ? (
+                      <div class="kn-md-card">
+                        <div class="kn-prose" set:html={contents[item.id]} />
+                      </div>
+                    ) : (
+                      <div class="kn-placeholder-card">
+                        <div class="kn-ph-dot"></div>
+                        <p class="kn-ph-text">制作中</p>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 右侧：配文 + 索引 */}
+          <aside class="kn-info">
+            {allItems.map((item, idx) => (
+              <div class={`kn-info-panel${idx === 0 ? ' active' : ''}`} data-info={item.id}>
+                <span class="kn-info-badge">
+                  {item.type === 'video' ? '视频' : '图文'} · {String(idx + 1).padStart(2, '0')} / {String(allItems.length).padStart(2, '0')}
+                </span>
+                {item.summary && item.summary !== '待补充' && (
+                  <p class="kn-info-desc">{item.summary}</p>
                 )}
               </div>
-            ) : (
-              <div class="kn-empty">
-                <Icon name="sparkles" size={24} strokeWidth={1.8} />
-                <p>内容还在整理中，后面会按「摘要 + Markdown + 视频封面」逐步补齐。</p>
-              </div>
-            )}
-          </section>
+            ))}
+          </aside>
         </div>
       ) : (
         <div class="kn-empty">
           <Icon name="sparkles" size={24} strokeWidth={1.8} />
-          <p>内容还在整理中，后面会按「摘要 + Markdown + 视频封面」逐步补齐。</p>
+          <p>内容还在整理中，敬请期待。</p>
         </div>
       )}
-
     </div>
   </section>
-
 </div>
 
 <script>
-  const buttons = document.querySelectorAll<HTMLElement>('[data-item]');
+  const tabs = document.querySelectorAll<HTMLElement>('.kn-tab[data-item]');
   const panels = document.querySelectorAll<HTMLElement>('[data-panel]');
+  const infos = document.querySelectorAll<HTMLElement>('[data-info]');
 
-  buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const groupId = button.dataset.group;
-      const itemId = button.dataset.item;
-      if (!groupId || !itemId) return;
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const itemId = tab.dataset.item;
+      if (!itemId) return;
 
-      buttons.forEach((b) => b.classList.remove('active'));
-      button.classList.add('active');
+      tabs.forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
 
-      panels.forEach((panel) => {
-        const match = panel.dataset.group === groupId && panel.dataset.item === itemId;
-        panel.classList.toggle('active', match);
-      });
+      panels.forEach((p) => p.classList.toggle('active', p.dataset.item === itemId));
+      infos.forEach((info) => info.classList.toggle('active', info.dataset.info === itemId));
 
-      button.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-      const sticky = document.querySelector<HTMLElement>('[data-kn-detail]');
-      if (sticky) {
-        sticky.scrollTop = 0;
-      }
+      tab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     });
   });
+
+  function initCarousel(carousel: HTMLElement) {
+    const slides = carousel.querySelectorAll<HTMLElement>('[data-slide]');
+    const dots = carousel.querySelectorAll<HTMLElement>('[data-dot]');
+    const prevBtn = carousel.querySelector<HTMLElement>('[data-prev]');
+    const nextBtn = carousel.querySelector<HTMLElement>('[data-next]');
+    const counter = carousel.querySelector<HTMLElement>('[data-current]');
+    const total = slides.length;
+    if (total === 0) return;
+    let current = 0;
+
+    function goTo(idx: number) {
+      if (idx < 0) idx = total - 1;
+      if (idx >= total) idx = 0;
+      slides.forEach((s) => s.classList.remove('active'));
+      dots.forEach((d) => d.classList.remove('active'));
+      slides[idx]?.classList.add('active');
+      dots[idx]?.classList.add('active');
+      if (counter) counter.textContent = String(idx + 1);
+      current = idx;
+    }
+
+    prevBtn?.addEventListener('click', () => goTo(current - 1));
+    nextBtn?.addEventListener('click', () => goTo(current + 1));
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => goTo(Number(dot.dataset.dot)));
+    });
+
+    carousel.setAttribute('tabindex', '0');
+    carousel.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current + 1); }
+    });
+
+    let startX = 0, startY = 0;
+    const viewport = carousel.querySelector<HTMLElement>('.kn-carousel-viewport');
+    if (viewport) {
+      viewport.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      }, { passive: true });
+      viewport.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - startX;
+        const dy = e.changedTouches[0].clientY - startY;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+          dx < 0 ? goTo(current + 1) : goTo(current - 1);
+        }
+      }, { passive: true });
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(initCarousel);
 </script>
 
 <style>
@@ -170,423 +242,313 @@ const firstItem = firstGroup?.items[0];
     max-width: 560px;
   }
 
-  .kn-layout {
-    display: grid;
-    grid-template-columns: minmax(270px, 0.62fr) minmax(0, 1.38fr);
-    gap: 10px;
-    align-items: start;
+  /* ── 三栏舞台布局：标签栏 | 卡片 | 信息 ── */
+  .kn-stage {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    max-width: 720px;
+    margin: 0 auto;
   }
 
-  .kn-nav {
+  /* ── 左侧标题列表 ── */
+  .kn-tabs {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 2px;
+    padding: 6px 0;
     position: sticky;
-    top: 8px;
-    max-height: calc(100vh - 96px);
-    overflow: auto;
-    padding-right: 2px;
+    top: 20px;
+    flex-shrink: 0;
+    width: 180px;
   }
 
-  .kn-section-block {
-    background: var(--surface2);
-    border-radius: var(--radius-lg);
-    padding: 8px 9px 7px;
-    border: 1px solid rgba(0, 0, 0, 0.03);
-  }
-
-  .kn-section-head {
-    display: flex; justify-content: flex-start; align-items: baseline;
-    margin-bottom: 5px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.035);
-  }
-
-  .kn-section-title {
-    font-size: 0.92rem;
-    font-weight: 800;
-    color: var(--text);
-  }
-
-  .kn-section-desc {
-    display: none;
-  }
-
-  .kn-item-list {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    padding-left: 2px;
-    position: relative;
-  }
-
-  .kn-item-list::before {
-    content: '';
-    position: absolute;
-    left: 11px;
-    top: 2px;
-    bottom: 2px;
-    width: 1px;
-    background: rgba(0, 0, 0, 0.04);
-  }
-
-  .kn-item-btn {
-    border: none;
+  .kn-tab {
     border-radius: 10px;
+    border: none;
     background: transparent;
-    padding: 6px 8px 6px 22px;
-    text-align: left;
     cursor: pointer;
-    transition: all var(--transition);
     display: flex;
-    gap: 6px;
     align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    transition: all 0.2s;
+    text-align: left;
     width: 100%;
   }
 
-  .kn-item-btn:hover,
-  .kn-item-btn.active {
+  .kn-tab:hover { background: var(--kn-soft); }
+
+  .kn-tab.active {
     background: var(--kn-soft);
   }
 
-  .kn-item-btn:hover .kn-item-title,
-  .kn-item-btn.active .kn-item-title {
-    color: var(--kn-color);
-  }
-
-  .kn-item-bullet {
-    width: 7px;
-    height: 7px;
-    border-radius: 999px;
-    background: var(--text3);
+  .kn-tab-idx {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--text3);
+    font-variant-numeric: tabular-nums;
     flex-shrink: 0;
-    margin-left: -12px;
-    position: relative;
-    z-index: 1;
+    width: 18px;
+    text-align: center;
   }
 
-  .kn-item-btn.active .kn-item-bullet {
-    background: var(--kn-color);
-  }
+  .kn-tab.active .kn-tab-idx { color: var(--kn-color); }
 
-  .kn-item-title {
-    font-size: 0.73rem;
-    color: var(--text);
-    line-height: 1.4;
-    white-space: nowrap;
+  .kn-tab-title {
+    font-size: 0.78rem;
+    color: var(--text2);
+    line-height: 1.35;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .kn-detail {
-    position: sticky;
-    top: 8px;
-    background: var(--surface2);
-    border-radius: var(--radius-lg);
-    padding: 14px;
-    min-height: 440px;
-    border: 1px solid rgba(0, 0, 0, 0.03);
+  .kn-tab.active .kn-tab-title {
+    color: var(--kn-color);
+    font-weight: 700;
   }
 
-  .kn-panels {
-    position: relative;
+  .kn-tab:hover .kn-tab-title { color: var(--text); }
+
+  /* ── 中间卡片主体 ── */
+  .kn-viewer {
+    width: 340px;
+    flex-shrink: 0;
+    margin: 0 16px;
   }
+
+  .kn-panels { position: relative; }
 
   .kn-panel {
     display: none;
-    animation: knFadeIn 0.18s ease;
+    animation: knFadeIn 0.2s ease;
   }
-
-  .kn-panel.active {
-    display: block;
-  }
+  .kn-panel.active { display: block; }
 
   @keyframes knFadeIn {
-    from { opacity: 0; transform: translateY(4px); }
+    from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .kn-doc-content {
-    padding: 4px 6px;
+  /* ── 轮播 ── */
+  .kn-carousel {
+    position: relative;
+    outline: none;
+    user-select: none;
   }
 
-  .kn-doc-header {
-    margin-bottom: 18px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  .kn-carousel-viewport {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface2);
+    aspect-ratio: 3 / 4;
+    border: 1.5px dashed rgba(0, 0, 0, 0.1);
   }
 
-  .kn-doc-title {
-    font-size: 1.1rem;
-    font-weight: 800;
+  .kn-carousel-track { width: 100%; height: 100%; position: relative; }
+
+  .kn-slide {
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.3s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .kn-slide.active { opacity: 1; z-index: 1; }
+
+  .kn-slide img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+  }
+
+  .kn-carousel-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    z-index: 2;
+    width: 32px; height: 32px;
+    border-radius: 50%; border: none;
+    background: rgba(255, 255, 255, 0.88);
     color: var(--text);
-    margin-bottom: 4px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    opacity: 0;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  }
+  .kn-carousel-viewport:hover .kn-carousel-btn { opacity: 1; }
+  .kn-carousel-btn:hover { background: #fff; transform: translateY(-50%) scale(1.06); }
+  .kn-carousel-prev { left: 8px; }
+  .kn-carousel-next { right: 8px; }
+
+  .kn-carousel-dots {
+    display: flex; justify-content: center;
+    gap: 5px; padding: 8px 0 2px;
   }
 
-  .kn-doc-summary {
-    font-size: 0.78rem;
-    color: var(--text2);
-    line-height: 1.5;
+  .kn-dot {
+    width: 6px; height: 6px;
+    border-radius: 999px; border: none;
+    background: var(--text3); opacity: 0.3;
+    cursor: pointer; padding: 0;
+    transition: all 0.2s;
+  }
+  .kn-dot.active { opacity: 1; background: var(--kn-color); width: 16px; }
+
+  .kn-carousel-counter {
+    position: absolute; top: 10px; right: 12px; z-index: 3;
+    font-size: 0.65rem; color: #fff;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 2px 7px; border-radius: 8px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* ── Markdown 卡片 ── */
+  .kn-md-card {
+    background: var(--surface2);
+    border-radius: 16px;
+    padding: 20px 18px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    max-height: 520px;
+    overflow-y: auto;
   }
 
   .kn-prose {
-    font-size: 0.84rem;
-    line-height: 1.85;
-    color: var(--text);
-    max-width: 100%;
-    overflow-wrap: break-word;
+    font-size: 0.82rem; line-height: 1.8; color: var(--text);
+    max-width: 100%; overflow-wrap: break-word;
   }
+  .kn-prose :global(h2) { font-size: 0.96rem; font-weight: 800; margin: 24px 0 8px; color: var(--text); }
+  .kn-prose :global(h3) { font-size: 0.88rem; font-weight: 700; margin: 18px 0 6px; color: var(--text); }
+  .kn-prose :global(h4) { font-size: 0.82rem; font-weight: 700; margin: 14px 0 4px; color: var(--text); }
+  .kn-prose :global(p) { margin: 0 0 10px; }
+  .kn-prose :global(ul), .kn-prose :global(ol) { margin: 0 0 12px; padding-left: 18px; }
+  .kn-prose :global(li) { margin-bottom: 3px; }
+  .kn-prose :global(li::marker) { color: var(--kn-color); }
+  .kn-prose :global(strong) { font-weight: 700; color: var(--text); }
+  .kn-prose :global(a) { color: var(--kn-color); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+  .kn-prose :global(a:hover) { border-bottom-color: var(--kn-color); }
+  .kn-prose :global(code) { font-size: 0.76rem; background: var(--bg); padding: 2px 5px; border-radius: 4px; color: var(--kn-color); font-family: 'SF Mono', 'Fira Code', monospace; }
+  .kn-prose :global(pre) { margin: 0 0 14px; padding: 12px 14px; background: #2d2a28; border-radius: 10px; overflow-x: auto; font-size: 0.74rem; line-height: 1.7; }
+  .kn-prose :global(pre code) { background: none; padding: 0; color: #e8e0d8; font-size: inherit; }
+  .kn-prose :global(blockquote) { margin: 0 0 12px; padding: 8px 14px; border-left: 3px solid var(--kn-color); background: var(--kn-soft); border-radius: 0 8px 8px 0; font-size: 0.8rem; color: var(--text2); }
+  .kn-prose :global(blockquote p) { margin: 0; }
+  .kn-prose :global(hr) { border: none; height: 1px; background: rgba(0, 0, 0, 0.05); margin: 20px 0; }
+  .kn-prose :global(table) { width: 100%; border-collapse: collapse; margin: 0 0 14px; font-size: 0.76rem; }
+  .kn-prose :global(th) { text-align: left; padding: 6px 8px; background: var(--bg); font-weight: 700; border-bottom: 1px solid rgba(0, 0, 0, 0.06); }
+  .kn-prose :global(td) { padding: 5px 8px; border-bottom: 1px solid rgba(0, 0, 0, 0.03); color: var(--text2); }
 
-  .kn-prose :global(h2) {
-    font-size: 1rem;
-    font-weight: 800;
-    margin: 28px 0 10px;
-    color: var(--text);
-    letter-spacing: -0.01em;
-  }
-
-  .kn-prose :global(h3) {
-    font-size: 0.9rem;
-    font-weight: 700;
-    margin: 22px 0 8px;
-    color: var(--text);
-  }
-
-  .kn-prose :global(h4) {
-    font-size: 0.84rem;
-    font-weight: 700;
-    margin: 18px 0 6px;
-    color: var(--text);
-  }
-
-  .kn-prose :global(p) {
-    margin: 0 0 12px;
-  }
-
-  .kn-prose :global(ul),
-  .kn-prose :global(ol) {
-    margin: 0 0 14px;
-    padding-left: 20px;
-  }
-
-  .kn-prose :global(li) {
-    margin-bottom: 4px;
-  }
-
-  .kn-prose :global(li::marker) {
-    color: var(--kn-color);
-  }
-
-  .kn-prose :global(strong) {
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .kn-prose :global(a) {
-    color: var(--kn-color);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s;
-  }
-
-  .kn-prose :global(a:hover) {
-    border-bottom-color: var(--kn-color);
-  }
-
-  .kn-prose :global(code) {
-    font-size: 0.78rem;
-    background: var(--bg);
-    padding: 2px 6px;
-    border-radius: 5px;
-    color: var(--kn-color);
-    font-family: 'SF Mono', 'Fira Code', monospace;
-  }
-
-  .kn-prose :global(pre) {
-    margin: 0 0 16px;
-    padding: 14px 16px;
-    background: #2d2a28;
-    border-radius: 12px;
-    overflow-x: auto;
-    font-size: 0.76rem;
-    line-height: 1.7;
-  }
-
-  .kn-prose :global(pre code) {
-    background: none;
-    padding: 0;
-    color: #e8e0d8;
-    font-size: inherit;
-  }
-
-  .kn-prose :global(blockquote) {
-    margin: 0 0 14px;
-    padding: 10px 16px;
-    border-left: 3px solid var(--kn-color);
-    background: var(--kn-soft);
-    border-radius: 0 10px 10px 0;
-    font-size: 0.82rem;
-    color: var(--text2);
-  }
-
-  .kn-prose :global(blockquote p) {
-    margin: 0;
-  }
-
-  .kn-prose :global(hr) {
-    border: none;
-    height: 1px;
-    background: rgba(0, 0, 0, 0.05);
-    margin: 24px 0;
-  }
-
-  .kn-prose :global(table) {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 0 0 16px;
-    font-size: 0.78rem;
-  }
-
-  .kn-prose :global(th) {
-    text-align: left;
-    padding: 8px 10px;
-    background: var(--bg);
-    font-weight: 700;
-    color: var(--text);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  }
-
-  .kn-prose :global(td) {
-    padding: 7px 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
-    color: var(--text2);
-  }
-
-  .kn-doc-placeholder {
-    min-height: 470px;
-    border-radius: 14px;
-    background: var(--bg);
+  /* ── 占位卡片 ── */
+  .kn-placeholder-card {
+    border-radius: 16px;
+    background: var(--surface2);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    color: var(--text3);
-    padding: 24px;
-    text-align: center;
+    gap: 12px;
+    aspect-ratio: 3 / 4;
+    border: 1.5px dashed rgba(0, 0, 0, 0.1);
   }
 
-  .kn-draft-icon {
-    width: 36px;
-    height: 36px;
+  .kn-ph-dot {
+    width: 32px; height: 32px;
     border-radius: 50%;
     background: var(--kn-soft);
-    margin-bottom: 4px;
   }
 
-  .kn-draft-title {
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: var(--text2);
-  }
-
-  .kn-doc-placeholder p {
-    max-width: 260px;
-    font-size: 0.82rem;
-    line-height: 1.7;
-  }
-
-  .kn-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 14px;
-  }
-
-  .kn-card {
-    display: block;
-    background: var(--surface2);
-    border-radius: var(--radius);
-    overflow: hidden;
-    transition: all var(--transition);
-    text-decoration: none;
-    color: inherit;
-  }
-  .kn-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
-  .kn-card-link:hover { color: inherit; }
-
-  .kn-card-body { padding: 16px 18px; }
-
-  .kn-card-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 8px;
-  }
-
-  .kn-card-icon {
-    width: 30px; height: 30px; border-radius: 8px;
-    background: var(--kn-soft); color: var(--kn-color);
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .kn-badge {
-    font-size: 0.68rem; padding: 2px 8px; border-radius: 10px;
-    font-weight: 500;
-  }
-  .kn-badge--doc { background: var(--accent-soft); color: var(--accent); }
-  .kn-badge--video { background: var(--orange-soft); color: var(--orange); }
-
-  .kn-card-title {
-    font-size: 0.95rem; font-weight: 700; color: var(--text);
-    margin-bottom: 4px;
-  }
-  .kn-card-desc {
-    font-size: 0.8rem; color: var(--text2); line-height: 1.6;
-  }
-
-  /* Video */
-  .kn-video-wrap {
-    width: 100%; aspect-ratio: 16 / 9;
-    background: var(--bg); overflow: hidden;
-  }
-
-  .kn-video-cover {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-  }
-
-  .kn-video {
-    width: 100%; height: 100%; object-fit: cover;
-    display: block;
-  }
-
-  .kn-video-placeholder {
-    width: 100%; height: 100%;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 8px;
+  .kn-ph-text {
+    font-size: 0.78rem;
     color: var(--text3);
   }
-  .kn-video-placeholder span { font-size: 0.78rem; }
+
+  /* ── 右侧配文面板 ── */
+  .kn-info {
+    width: 200px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+    padding-top: 6px;
+  }
+
+  .kn-info-panel {
+    display: none;
+    animation: knFadeIn 0.2s ease;
+    border: 1.5px dashed rgba(0, 0, 0, 0.1);
+    border-radius: 14px;
+    padding: 14px 16px;
+  }
+  .kn-info-panel.active { display: block; }
+
+  .kn-info-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    color: var(--kn-color);
+    background: var(--kn-soft);
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .kn-info-desc {
+    font-size: 0.78rem;
+    color: var(--text2);
+    line-height: 1.7;
+  }
 
   .kn-empty {
     min-height: 180px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 10px;
-    border-radius: var(--radius-lg);
-    background: var(--surface2);
-    color: var(--text3);
-    text-align: center;
-    padding: 24px;
+    gap: 10px; border-radius: var(--radius-lg);
+    background: var(--surface2); color: var(--text3);
+    text-align: center; padding: 24px;
   }
   .kn-empty p { font-size: 0.85rem; line-height: 1.7; max-width: 360px; }
 
-  /* Mobile */
+  /* ── Mobile ── */
   @media (max-width: 768px) {
     .kn-hero-row { flex-wrap: wrap; gap: 10px; }
-    .kn-layout { grid-template-columns: 1fr; }
-    .kn-nav { position: static; max-height: none; overflow: visible; padding-right: 0; }
-    .kn-detail { position: static; min-height: auto; }
-    .kn-section-head { flex-direction: column; }
-    .kn-section-desc { max-width: none; }
-    .kn-item-btn { width: 100%; }
-    .kn-item-list::before { left: 11px; }
-    .kn-item-bullet { margin-left: -12px; }
+
+    .kn-stage {
+      flex-direction: column;
+      align-items: center;
+      max-width: 100%;
+      gap: 12px;
+    }
+
+    .kn-tabs {
+      flex-direction: row;
+      position: static;
+      overflow-x: auto;
+      gap: 4px;
+      padding: 0 0 4px;
+      width: 100%;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+    }
+    .kn-tabs::-webkit-scrollbar { display: none; }
+
+    .kn-tab {
+      padding: 6px 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      border-radius: 8px;
+    }
+    .kn-tab-idx { display: none; }
+    .kn-tab-title { font-size: 0.74rem; }
+
+    .kn-viewer {
+      width: 100%;
+      max-width: 340px;
+      margin: 0;
+    }
+
+    .kn-info {
+      width: 100%;
+      max-width: 340px;
+      position: static;
+      padding-top: 0;
+    }
+
+    .kn-carousel-btn { opacity: 0.7; }
   }
 </style>
