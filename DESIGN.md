@@ -323,7 +323,9 @@ anjing-site/src/
 }
 ```
 
-`KnowledgeItem`：`{ id, title, summary, type, draft?, mdPath?, coverUrl?, externalUrl?, embedUrl? }`
+`KnowledgeItem`：`{ id, title, summary, type, draft?, cover?, slides?: KnowledgeSlide[], mdPath?, coverUrl?, externalUrl?, embedUrl? }`
+
+`KnowledgeSlide`：`{ url: string; alt?: string }`
 
 ### 项目 `Project`（`projects.ts`）
 
@@ -339,7 +341,7 @@ anjing-site/src/
 |------|------|----------|
 | `HubHome` | Hub 首页渲染（三列翻转卡 + 画像入口 + 知识入口） | `/cs` `/finance` `/body` `/photo` `/food` |
 | `PathTimeline` | 水平时间线 + 点击切换资源面板 | 所有画像路径页 |
-| `KnowledgePage` | 左目录右内容的知识详情 | 所有知识域页 |
+| `KnowledgePage` | 三栏舞台布局（左标题列表 ｜ 中 3:4 图片轮播 ｜ 右配文面板） | 所有知识域页 |
 | `BaseLayout` | 全局 HTML 壳（head + main + Footer） | 所有页面 |
 
 ### 组件参数传递
@@ -379,11 +381,15 @@ anjing-site/src/
 | 美食 Hub | ✅ | 厨房入门/家常/烘焙/异国 + 美食地图/烹饪/食材/文化 |
 | 项目页 ×4 | ✅ | knowledge / aigc / customer-service / scaffolding |
 | Hub 首页三区色块 | ✅ | 指引区（淡蓝）、路径区（淡绿）、知识区（淡紫），三列 grid 对齐 |
+| 知识域详情页重构 | ✅ | 三栏舞台布局（标题列表 ｜ 3:4 卡片轮播 ｜ 配文面板），虚线框视觉 |
+| 图片轮播系统 | ✅ | cover + slides 数据结构，左右箭头/指示点/键盘/触摸滑动 |
+| 内容展示优先级 | ✅ | slides → Markdown → 占位卡片，三种模式自动切换 |
 | Markdown 内容管线 | ✅ | `import.meta.glob` 加载 md → KnowledgePage 渲染，prose 排版 |
 | 金融交易学内容 ×6 | ✅ | K线形态/量价均线/入场止损/持有退出/情绪纪律/认知偏差 |
+| Footer 引流卡片 | ✅ | 安静 AIGC + 安静 RichFree |
 | Favicon | ✅ | 蝴蝶图标（SVG），替换原粉紫字母 A |
 | 雾化消融效果 | ✅ | 全站统一卡片交互 |
-| 样式系统 | ✅ | CSS 变量、暖粉调色板、响应式、区块色块系统 |
+| 样式系统 | ✅ | CSS 变量、暖粉调色板、响应式、区块色块系统、虚线框 |
 | 构建验证 | ✅ | 58 页全部构建通过 |
 | `.gitignore` | ✅ | 已配置 |
 | Cloudflare Pages | ✅ | 已部署，`anjing.cc` + `anjing-3ik.pages.dev`，自动部署已开启 |
@@ -394,11 +400,9 @@ anjing-site/src/
 
 | 模块 | 状态 | 说明 |
 |------|------|------|
-| 金融风险管理内容 ×6 | 🔲 | `knowledge.ts` 中 `risk-management` 的 6 个条目待填充 md |
-| 金融其他知识域内容 | 🔲 | 金融学、经济学的 KnowledgeItem 都是 `draft: true` |
-| 计算机知识域内容 | 🔲 | 同上 |
-| 身体/摄影/美食知识域内容 | 🔲 | 同上，全部 `draft: true` |
-| Footer 引流内容 | 🔲 | 3 个 promo-card 内容待填充 |
+| 各赛道大纲定稿 | 🔲 | 5 赛道 × 4 知识域，条目标题/数量待逐一敲定（计算机已开始） |
+| 图文内容制作 | 🔲 | 用 AIGC 工具批量制作 cover + slides 图片，按大纲逐条填充 |
+| 知识域内容填充 | 🔲 | 除交易学 6 篇 md 外，其余全部 `draft: true` |
 | 微信二维码 | 🔲 | 当前为占位框，待替换真实图片 |
 | Header 导航栏 | 🔲 | 组件已有，当前未启用 |
 | CDN 静态资源加速 | 🔲 | `public/assets/hubs/` 目录已预留 |
