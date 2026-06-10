@@ -8,21 +8,12 @@ import '../styles/index.css';
   <div class="index-page">
     <section class="intro-screen" aria-labelledby="intro-title">
       <div class="container intro-container">
-        <p class="intro-kicker">anjing.cc</p>
         <h1 id="intro-title" class="entry-title">你好，我是<span class="gradient-text">安静</span></h1>
-        <p class="intro-copy">我把长期做的事，慢慢整理在这里。</p>
-        <p class="intro-tracks">计算机 · 金融 · 身体 · 摄影 · 美食</p>
-        <a class="intro-scroll" href="#tracks">往下看</a>
       </div>
     </section>
 
-    <section class="tracks-screen" id="tracks" aria-labelledby="tracks-title">
+    <section class="tracks-screen" id="tracks" aria-label="赛道目录">
       <div class="container">
-        <div class="tracks-head">
-          <p class="tracks-kicker">Tracks</p>
-          <h2 id="tracks-title">一些正在长期整理的方向</h2>
-        </div>
-
         <div class="entry-grid">
           {hubs.map((hub) => (
             <a href={hub.href} class={`flip-container flip-link${hub.href === '#' ? ' is-disabled' : ''}`}>
