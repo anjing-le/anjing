@@ -55,10 +55,10 @@ const projectLinks = [
             <div class="promo-back">请早日财富自由 谢谢～</div>
           </div>
         </div>
-        <div class="promo-card">
+        <div class="promo-card promo-wechat">
           <div class="promo-inner">
-            <div class="promo-front">引流区域 3</div>
-            <div class="promo-back">内容待补充</div>
+            <div class="promo-front">加微信聊聊</div>
+            <div class="promo-back">扫码添加，备注来意<br/>交流技术 / 投研 / 合作</div>
           </div>
         </div>
       </div>
@@ -75,35 +75,33 @@ const projectLinks = [
   .footer {
     border-top: 1px solid var(--border);
     background: var(--bg);
-    padding: 40px 0 0;
+    padding: 32px 0 0;
   }
 
-  .footer-inner { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+  .footer-inner { width: 100%; max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
 
   .footer-grid {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 40px;
+    display: grid;
+    grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.8fr);
+    align-items: stretch;
+    gap: 32px;
   }
 
-  .footer-left { flex-shrink: 0; }
+  .footer-left { min-width: 0; }
   .footer-brand { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
   .footer-desc { color: var(--text2); font-size: 0.85rem; line-height: 1.6; margin-bottom: 16px; }
   .footer-social { display: flex; gap: 8px; align-items: center; }
 
-  .footer-grid {
-    align-items: stretch;
-  }
-
   .footer-right {
-    flex: 1;
-    display: flex;
-    gap: 16px;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
   }
 
   .promo-card {
-    flex: 1;
+    min-width: 0;
+    min-height: 96px;
     border-radius: var(--radius-lg);
     text-decoration: none;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
@@ -129,20 +127,20 @@ const projectLinks = [
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
     font-size: 0.85rem;
     font-weight: 500;
-    letter-spacing: 0.03em;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                filter 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0;
+    line-height: 1.55;
+    padding: 14px 16px;
+    transition: opacity 0.28s ease, transform 0.28s ease;
   }
 
   .promo-front {
-    border: 2px dashed var(--text3);
+    border: 1px solid rgba(45, 42, 40, 0.08);
     color: var(--text3);
-    background: var(--surface2);
+    background: rgba(255, 255, 255, 0.22);
     opacity: 1;
-    filter: blur(0);
     transform: scale(1);
     z-index: 2;
   }
@@ -151,21 +149,30 @@ const projectLinks = [
     color: var(--text2);
     background: var(--surface2);
     opacity: 0;
-    filter: blur(6px);
-    transform: scale(0.97);
+    transform: translateY(4px) scale(0.99);
     z-index: 1;
   }
 
   .promo-card:hover .promo-front {
     opacity: 0;
-    filter: blur(8px);
-    transform: scale(1.03);
+    transform: translateY(-4px) scale(0.99);
   }
 
   .promo-card:hover .promo-back {
     opacity: 1;
-    filter: blur(0);
     transform: scale(1);
+  }
+
+  @media (hover: none) {
+    .promo-card:hover .promo-front {
+      opacity: 1;
+      transform: none;
+    }
+
+    .promo-card:hover .promo-back {
+      opacity: 0;
+      transform: translateY(4px) scale(0.99);
+    }
   }
 
   .social-link {
@@ -235,9 +242,35 @@ const projectLinks = [
   }
 
   @media (max-width: 768px) {
-    .footer-grid { flex-direction: column; gap: 24px; }
+    .footer { padding: 28px 0 0; }
+    .footer-inner { padding: 0 18px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 20px; }
     .footer-left { text-align: center; }
+    .footer-brand { font-size: 1rem; }
+    .footer-desc { font-size: 0.78rem; }
     .footer-social { justify-content: center; }
-    .footer-right { max-width: 100%; flex-direction: column; }
+    .footer-right {
+      max-width: 100%;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .promo-card {
+      min-width: 0;
+      min-height: 76px;
+    }
+    .promo-card:nth-child(3) {
+      grid-column: 1 / -1;
+    }
+    .promo-front,
+    .promo-back {
+      font-size: 0.76rem;
+      padding: 16px 12px;
+      min-height: 72px;
+    }
+    .footer-bottom {
+      margin-top: 20px;
+      padding: 12px 0;
+      font-size: 0.72rem;
+    }
   }
 </style>

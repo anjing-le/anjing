@@ -1,31 +1,31 @@
 ---
 import Icon from './Icon.astro';
 
-const navItems = [
-  { label: '首页', href: '/' },
-  { label: '学习路径', href: '/#paths' },
-  { label: '项目实战', href: '/#projects' },
+const hubNav = [
+  { label: '计算机', href: '/cs', color: 'var(--pink)' },
+  { label: '金融', href: '/finance', color: 'var(--gold)' },
+  { label: '身体', href: '/body', color: 'var(--green)' },
+  { label: '摄影', href: '/photo', color: 'var(--cyan)' },
+  { label: '美食', href: '/food', color: 'var(--orange)' },
 ];
 
 const currentPath = Astro.url.pathname;
+const activeHub = hubNav.find(h => currentPath.startsWith(h.href));
 ---
 
 <header class="header">
   <div class="header-inner">
     <a href="/" class="brand">
-      <span class="brand-logo"></span>
-      <span class="brand-text">安静 <span class="brand-dot">&middot;</span> 计算机</span>
+      <span class="brand-text">安静</span>
     </a>
 
     <nav class="nav" id="nav">
-      {navItems.map((item) => (
-        <a href={item.href} class:list={['nav-link', { active: currentPath === item.href }]}>
+      {hubNav.map((item) => (
+        <a href={item.href} class:list={['nav-link', { active: currentPath.startsWith(item.href) }]}>
+          <span class="nav-dot" style={`background:${item.color};`}></span>
           {item.label}
         </a>
       ))}
-      <a href="https://github.com/anjing-le" target="_blank" rel="noopener" class="nav-link nav-github" aria-label="GitHub">
-        <Icon name="github" size={18} strokeWidth={1.5} />
-      </a>
     </nav>
 
     <button class="menu-toggle" id="menuToggle" aria-label="菜单">
@@ -43,10 +43,11 @@ const currentPath = Astro.url.pathname;
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border-bottom: 1px solid var(--border);
-    height: 64px;
+    height: 56px;
   }
 
   .header-inner {
+    width: 100%;
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 24px;
@@ -57,29 +58,31 @@ const currentPath = Astro.url.pathname;
   }
 
   .brand {
-    display: flex; align-items: center; gap: 10px;
+    display: flex; align-items: center;
     text-decoration: none; color: var(--text);
-    font-weight: 700; font-size: 1.05rem;
+    font-weight: 700; font-size: 1rem;
+    letter-spacing: 0;
   }
 
-  .brand-logo {
-    width: 30px; height: 30px; border-radius: 8px;
-    background: linear-gradient(135deg, var(--pink), var(--purple));
-  }
-
-  .brand-dot { color: var(--pink); margin: 0 2px; }
-
-  .nav { display: flex; align-items: center; gap: 4px; }
+  .nav { display: flex; align-items: center; gap: 2px; }
 
   .nav-link {
-    padding: 8px 16px; border-radius: var(--radius-sm);
-    color: var(--text3); font-size: 0.88rem; font-weight: 500;
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: var(--radius-sm);
+    color: var(--text3); font-size: 0.84rem; font-weight: 500;
     text-decoration: none; transition: all var(--transition);
   }
 
-  .nav-link:hover, .nav-link.active { color: var(--text); background: var(--surface); }
+  .nav-link:hover { color: var(--text); background: var(--surface); }
+  .nav-link.active { color: var(--text); background: var(--surface); }
 
-  .nav-github { display: flex; align-items: center; padding: 8px; margin-left: 4px; }
+  .nav-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    opacity: 0.6; transition: opacity var(--transition);
+  }
+
+  .nav-link:hover .nav-dot,
+  .nav-link.active .nav-dot { opacity: 1; }
 
   .menu-toggle {
     display: none; background: none; border: none;
@@ -87,15 +90,16 @@ const currentPath = Astro.url.pathname;
   }
 
   @media (max-width: 768px) {
+    .header-inner { padding: 0 18px; }
     .menu-toggle { display: flex; align-items: center; }
     .nav {
-      display: none; position: absolute; top: 64px; left: 0; right: 0;
+      display: none; position: absolute; top: 56px; left: 0; right: 0;
       flex-direction: column; background: rgba(253, 245, 243, 0.96);
       backdrop-filter: blur(24px); border-bottom: 1px solid var(--border);
-      padding: 16px 24px; gap: 4px;
+      padding: 10px 18px 14px; gap: 4px;
     }
     .nav.open { display: flex; }
-    .nav-link { width: 100%; padding: 12px 16px; }
+    .nav-link { width: 100%; padding: 10px 16px; }
   }
 </style>
 

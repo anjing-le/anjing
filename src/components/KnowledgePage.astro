@@ -12,7 +12,13 @@ interface Props {
 const { domain, contents = {}, backHref = '/', backLabel = '返回首页' } = Astro.props;
 
 const allItems = domain.groups.flatMap((g) => g.items);
-const firstItem = allItems[0];
+const readyItems = allItems.filter((item) => (
+  !item.draft ||
+  !!contents[item.id] ||
+  !!item.cover ||
+  !!item.slides?.length
+));
+const stageItems = readyItems.length > 0 ? readyItems : allItems;
 ---
 
 <div class="kn-page" style={`--kn-color: ${domain.color}; --kn-soft: ${domain.soft}`}>
@@ -33,13 +39,13 @@ const firstItem = allItems[0];
     </div>
   </section>
 
-  <section class="section">
+  <section class="section kn-content-section">
     <div class="container">
-      {allItems.length > 0 ? (
+      {stageItems.length > 0 ? (
         <div class="kn-stage">
-          {/* 左侧：标题列表 */}
+          {/* 顶部：精选目录 */}
           <nav class="kn-tabs">
-            {allItems.map((item, idx) => (
+            {stageItems.map((item, idx) => (
               <button
                 class={`kn-tab${idx === 0 ? ' active' : ''}`}
                 type="button"
@@ -51,12 +57,12 @@ const firstItem = allItems[0];
             ))}
           </nav>
 
-          {/* 中间：卡片主体 */}
-          <div class="kn-viewer" data-kn-detail>
+          {/* 主体：图文阅读卡 */}
+          <div class="kn-reader" data-kn-detail>
             <div class="kn-panels">
-              {allItems.map((item, idx) => {
+              {stageItems.map((item, idx) => {
                 const isFirst = idx === 0;
-                const hasSlides = item.cover || (item.slides && item.slides.length > 0);
+                const hasSlides = !!(item.cover || (item.slides && item.slides.length > 0));
                 const allSlides = [
                   ...(item.cover ? [{ url: item.cover, alt: item.title + ' 封面' }] : []),
                   ...(item.slides || []),
@@ -69,41 +75,57 @@ const firstItem = allItems[0];
                     data-panel
                     data-item={item.id}
                   >
-                    {hasSlides ? (
-                      <div class="kn-carousel" data-carousel>
-                        <div class="kn-carousel-viewport">
-                          <div class="kn-carousel-track" data-track>
-                            {allSlides.map((slide, i) => (
-                              <div class={`kn-slide${i === 0 ? ' active' : ''}`} data-slide={i}>
-                                <img src={slide.url} alt={slide.alt || item.title} loading="lazy" draggable="false" />
+                    {hasSlides || hasMd ? (
+                      <div class={`kn-panel-grid${!hasSlides ? ' no-media' : ''}`}>
+                        {hasSlides && (
+                          <div class="kn-media">
+                            <div class="kn-carousel" data-carousel>
+                              <div class="kn-carousel-viewport">
+                                <div class="kn-carousel-track" data-track>
+                                  {allSlides.map((slide, i) => (
+                                    <div class={`kn-slide${i === 0 ? ' active' : ''}`} data-slide={i}>
+                                      <img src={slide.url} alt={slide.alt || item.title} loading="lazy" draggable="false" />
+                                    </div>
+                                  ))}
+                                </div>
+                                {allSlides.length > 1 && (
+                                  <>
+                                    <button class="kn-carousel-btn kn-carousel-prev" data-prev aria-label="上一张">
+                                      <Icon name="chevron-left" size={20} strokeWidth={2} />
+                                    </button>
+                                    <button class="kn-carousel-btn kn-carousel-next" data-next aria-label="下一张">
+                                      <Icon name="chevron-right" size={20} strokeWidth={2} />
+                                    </button>
+                                  </>
+                                )}
                               </div>
-                            ))}
-                          </div>
-                          {allSlides.length > 1 && (
-                            <>
-                              <button class="kn-carousel-btn kn-carousel-prev" data-prev aria-label="上一张">
-                                <Icon name="chevron-left" size={20} strokeWidth={2} />
-                              </button>
-                              <button class="kn-carousel-btn kn-carousel-next" data-next aria-label="下一张">
-                                <Icon name="chevron-right" size={20} strokeWidth={2} />
-                              </button>
-                            </>
-                          )}
-                        </div>
-                        {allSlides.length > 1 && (
-                          <div class="kn-carousel-dots" data-dots>
-                            {allSlides.map((_, i) => (
-                              <button class={`kn-dot${i === 0 ? ' active' : ''}`} data-dot={i} aria-label={`第 ${i + 1} 张`} />
-                            ))}
+                              {allSlides.length > 1 && (
+                                <div class="kn-carousel-dots" data-dots>
+                                  {allSlides.map((_, i) => (
+                                    <button class={`kn-dot${i === 0 ? ' active' : ''}`} data-dot={i} aria-label={`第 ${i + 1} 张`} />
+                                  ))}
+                                </div>
+                              )}
+                              <div class="kn-carousel-counter">
+                                <span data-current>1</span> / {allSlides.length}
+                              </div>
+                            </div>
                           </div>
                         )}
-                        <div class="kn-carousel-counter">
-                          <span data-current>1</span> / {allSlides.length}
+                        <div class="kn-copy">
+                          {hasMd ? (
+                            <div class="kn-md-card">
+                              <span class="kn-info-badge">
+                                {item.type === 'video' ? '视频' : '图文'} · {String(idx + 1).padStart(2, '0')} / {String(stageItems.length).padStart(2, '0')}
+                              </span>
+                              <div class="kn-prose" set:html={contents[item.id]} />
+                            </div>
+                          ) : (
+                            <div class="kn-md-card">
+                              <p class="kn-muted">内容正在整理中。</p>
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    ) : hasMd ? (
-                      <div class="kn-md-card">
-                        <div class="kn-prose" set:html={contents[item.id]} />
                       </div>
                     ) : (
                       <div class="kn-placeholder-card">
@@ -116,20 +138,6 @@ const firstItem = allItems[0];
               })}
             </div>
           </div>
-
-          {/* 右侧：配文 + 索引 */}
-          <aside class="kn-info">
-            {allItems.map((item, idx) => (
-              <div class={`kn-info-panel${idx === 0 ? ' active' : ''}`} data-info={item.id}>
-                <span class="kn-info-badge">
-                  {item.type === 'video' ? '视频' : '图文'} · {String(idx + 1).padStart(2, '0')} / {String(allItems.length).padStart(2, '0')}
-                </span>
-                {item.summary && item.summary !== '待补充' && (
-                  <p class="kn-info-desc">{item.summary}</p>
-                )}
-              </div>
-            ))}
-          </aside>
         </div>
       ) : (
         <div class="kn-empty">
@@ -144,7 +152,6 @@ const firstItem = allItems[0];
 <script>
   const tabs = document.querySelectorAll<HTMLElement>('.kn-tab[data-item]');
   const panels = document.querySelectorAll<HTMLElement>('[data-panel]');
-  const infos = document.querySelectorAll<HTMLElement>('[data-info]');
 
   tabs.forEach((tab) => {
     tab.addEventListener('click', () => {
@@ -155,9 +162,8 @@ const firstItem = allItems[0];
       tab.classList.add('active');
 
       panels.forEach((p) => p.classList.toggle('active', p.dataset.item === itemId));
-      infos.forEach((info) => info.classList.toggle('active', info.dataset.info === itemId));
 
-      tab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      tab.scrollIntoView({ block: 'nearest', inline: 'center' });
     });
   });
 
@@ -215,7 +221,9 @@ const firstItem = allItems[0];
 </script>
 
 <style>
-  .kn-hero { padding: 36px 0 8px; }
+  .kn-hero { padding: 24px 0 8px; }
+
+  .kn-content-section { padding: 22px 0 64px; }
 
   .back-link {
     display: inline-flex; align-items: center; gap: 6px;
@@ -235,53 +243,50 @@ const firstItem = allItems[0];
     flex-shrink: 0;
   }
 
-  .kn-title { font-size: 1.28rem; font-weight: 800; letter-spacing: -0.02em; }
+  .kn-title { font-size: 1.28rem; font-weight: 800; letter-spacing: 0; }
   .kn-sub { color: var(--text3); font-size: 0.8rem; }
   .kn-desc {
     color: var(--text2); font-size: 0.8rem; line-height: 1.6;
     max-width: 560px;
   }
 
-  /* ── 三栏舞台布局：标签栏 | 卡片 | 信息 ── */
+  /* ── 精品阅读舞台：目录 | 图文卡 ── */
   .kn-stage {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 0;
-    max-width: 720px;
+    max-width: 980px;
     margin: 0 auto;
   }
 
-  /* ── 左侧标题列表 ── */
   .kn-tabs {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 6px 0;
-    position: sticky;
-    top: 20px;
-    flex-shrink: 0;
-    width: 180px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+    gap: 8px;
+    margin-bottom: 16px;
   }
 
   .kn-tab {
-    border-radius: 10px;
+    min-height: 58px;
+    border-radius: 16px;
     border: none;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.34);
     cursor: pointer;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
-    padding: 8px 10px;
+    padding: 12px 14px;
     transition: all 0.2s;
     text-align: left;
     width: 100%;
+    box-shadow: inset 0 0 0 1px rgba(45, 42, 40, 0.03);
   }
+
+  .kn-tab:focus { outline: none; }
+  .kn-tab:focus-visible { box-shadow: 0 0 0 2px var(--kn-soft); }
 
   .kn-tab:hover { background: var(--kn-soft); }
 
   .kn-tab.active {
-    background: var(--kn-soft);
+    background: var(--surface);
+    box-shadow: 0 8px 24px rgba(60, 40, 30, 0.035);
   }
 
   .kn-tab-idx {
@@ -290,8 +295,9 @@ const firstItem = allItems[0];
     color: var(--text3);
     font-variant-numeric: tabular-nums;
     flex-shrink: 0;
-    width: 18px;
-    text-align: center;
+    width: auto;
+    padding-top: 1px;
+    text-align: left;
   }
 
   .kn-tab.active .kn-tab-idx { color: var(--kn-color); }
@@ -302,7 +308,7 @@ const firstItem = allItems[0];
     line-height: 1.35;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
   }
 
   .kn-tab.active .kn-tab-title {
@@ -312,11 +318,11 @@ const firstItem = allItems[0];
 
   .kn-tab:hover .kn-tab-title { color: var(--text); }
 
-  /* ── 中间卡片主体 ── */
-  .kn-viewer {
-    width: 340px;
-    flex-shrink: 0;
-    margin: 0 16px;
+  /* ── 图文阅读主体 ── */
+  .kn-reader {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
   }
 
   .kn-panels { position: relative; }
@@ -326,6 +332,40 @@ const firstItem = allItems[0];
     animation: knFadeIn 0.2s ease;
   }
   .kn-panel.active { display: block; }
+
+  .kn-panel-grid {
+    display: grid;
+    grid-template-columns: minmax(280px, 330px) minmax(0, 1fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .kn-panel-grid.no-media {
+    grid-template-columns: minmax(0, 760px);
+    justify-content: center;
+  }
+
+  .kn-media,
+  .kn-copy {
+    min-width: 0;
+  }
+
+  .kn-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .kn-copy-head,
+  .kn-md-card {
+    background: rgba(255, 255, 255, 0.42);
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(45, 42, 40, 0.025);
+  }
+
+  .kn-copy-head {
+    padding: 16px 18px;
+  }
 
   @keyframes knFadeIn {
     from { opacity: 0; transform: translateY(6px); }
@@ -341,11 +381,11 @@ const firstItem = allItems[0];
 
   .kn-carousel-viewport {
     position: relative;
-    border-radius: 16px;
+    border-radius: 18px;
     overflow: hidden;
-    background: var(--surface2);
+    background: rgba(255, 255, 255, 0.42);
     aspect-ratio: 3 / 4;
-    border: 1.5px dashed rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(45, 42, 40, 0.025);
   }
 
   .kn-carousel-track { width: 100%; height: 100%; position: relative; }
@@ -404,25 +444,51 @@ const firstItem = allItems[0];
 
   /* ── Markdown 卡片 ── */
   .kn-md-card {
-    background: var(--surface2);
-    border-radius: 16px;
-    padding: 20px 18px;
-    border: 1px solid rgba(0, 0, 0, 0.04);
-    max-height: 520px;
-    overflow-y: auto;
+    padding: 16px;
+    overflow: visible;
+  }
+
+  .kn-panel-grid.no-media .kn-md-card {
+    max-height: min(720px, calc(100vh - 220px));
+    overflow: auto;
+    padding: 20px 22px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(45, 42, 40, 0.18) transparent;
+  }
+
+  .kn-panel-grid.no-media .kn-md-card::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .kn-panel-grid.no-media .kn-md-card::-webkit-scrollbar-thumb {
+    background: rgba(45, 42, 40, 0.16);
+    border-radius: 999px;
   }
 
   .kn-prose {
-    font-size: 0.82rem; line-height: 1.8; color: var(--text);
+    font-size: 0.79rem; line-height: 1.62; color: var(--text);
     max-width: 100%; overflow-wrap: break-word;
   }
-  .kn-prose :global(h2) { font-size: 0.96rem; font-weight: 800; margin: 24px 0 8px; color: var(--text); }
-  .kn-prose :global(h3) { font-size: 0.88rem; font-weight: 700; margin: 18px 0 6px; color: var(--text); }
-  .kn-prose :global(h4) { font-size: 0.82rem; font-weight: 700; margin: 14px 0 4px; color: var(--text); }
-  .kn-prose :global(p) { margin: 0 0 10px; }
-  .kn-prose :global(ul), .kn-prose :global(ol) { margin: 0 0 12px; padding-left: 18px; }
-  .kn-prose :global(li) { margin-bottom: 3px; }
-  .kn-prose :global(li::marker) { color: var(--kn-color); }
+  .kn-prose :global(h1) { font-size: 1rem; font-weight: 800; margin: 0 0 8px; color: var(--text); }
+  .kn-prose :global(h2) { font-size: 0.76rem; font-weight: 800; margin: 12px 0 5px; color: var(--kn-color); }
+  .kn-prose :global(h2:first-of-type) { margin-top: 0; }
+  .kn-prose :global(h3) { font-size: 0.82rem; font-weight: 700; margin: 14px 0 6px; color: var(--text); }
+  .kn-prose :global(h4) { font-size: 0.78rem; font-weight: 700; margin: 12px 0 4px; color: var(--text); }
+  .kn-prose :global(p) { margin: 0 0 7px; color: var(--text2); }
+  .kn-prose :global(ul), .kn-prose :global(ol) {
+    display: grid;
+    gap: 5px;
+    margin: 0 0 8px;
+    padding: 0;
+    list-style: none;
+  }
+  .kn-prose :global(li) {
+    margin: 0;
+    padding: 6px 8px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.48);
+    color: var(--text2);
+  }
   .kn-prose :global(strong) { font-weight: 700; color: var(--text); }
   .kn-prose :global(a) { color: var(--kn-color); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
   .kn-prose :global(a:hover) { border-bottom-color: var(--kn-color); }
@@ -435,6 +501,12 @@ const firstItem = allItems[0];
   .kn-prose :global(table) { width: 100%; border-collapse: collapse; margin: 0 0 14px; font-size: 0.76rem; }
   .kn-prose :global(th) { text-align: left; padding: 6px 8px; background: var(--bg); font-weight: 700; border-bottom: 1px solid rgba(0, 0, 0, 0.06); }
   .kn-prose :global(td) { padding: 5px 8px; border-bottom: 1px solid rgba(0, 0, 0, 0.03); color: var(--text2); }
+
+  @media (min-width: 769px) {
+    .kn-prose :global(ul), .kn-prose :global(ol) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
 
   /* ── 占位卡片 ── */
   .kn-placeholder-card {
@@ -460,24 +532,6 @@ const firstItem = allItems[0];
     color: var(--text3);
   }
 
-  /* ── 右侧配文面板 ── */
-  .kn-info {
-    width: 200px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 20px;
-    padding-top: 6px;
-  }
-
-  .kn-info-panel {
-    display: none;
-    animation: knFadeIn 0.2s ease;
-    border: 1.5px dashed rgba(0, 0, 0, 0.1);
-    border-radius: 14px;
-    padding: 14px 16px;
-  }
-  .kn-info-panel.active { display: block; }
-
   .kn-info-badge {
     display: inline-block;
     font-size: 0.65rem;
@@ -490,8 +544,15 @@ const firstItem = allItems[0];
   }
 
   .kn-info-desc {
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     color: var(--text2);
+    line-height: 1.65;
+  }
+
+  .kn-muted {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text3);
     line-height: 1.7;
   }
 
@@ -506,49 +567,85 @@ const firstItem = allItems[0];
 
   /* ── Mobile ── */
   @media (max-width: 768px) {
-    .kn-hero-row { flex-wrap: wrap; gap: 10px; }
+    .kn-hero { padding: 20px 0 4px; }
+    .kn-content-section { padding: 18px 0 36px; }
+    .kn-hero-row { flex-wrap: wrap; gap: 8px; }
+    .kn-title { font-size: 1.1rem; }
+    .kn-sub { font-size: 0.72rem; }
+    .kn-desc { font-size: 0.75rem; }
 
     .kn-stage {
-      flex-direction: column;
-      align-items: center;
       max-width: 100%;
-      gap: 12px;
     }
 
     .kn-tabs {
+      display: flex;
       flex-direction: row;
       position: static;
       overflow-x: auto;
-      gap: 4px;
-      padding: 0 0 4px;
-      width: 100%;
+      gap: 6px;
+      margin: 0 -18px;
+      padding: 2px 18px 8px;
+      width: auto;
       justify-content: flex-start;
       -webkit-overflow-scrolling: touch;
+      scroll-padding: 16px;
     }
     .kn-tabs::-webkit-scrollbar { display: none; }
 
     .kn-tab {
-      padding: 6px 12px;
+      padding: 8px 14px;
       white-space: nowrap;
       flex-shrink: 0;
-      border-radius: 8px;
+      border-radius: 20px;
+      background: var(--surface2);
+      width: auto;
+      max-width: 72vw;
+      min-height: auto;
+    }
+    .kn-tab.active {
+      background: var(--kn-soft);
     }
     .kn-tab-idx { display: none; }
-    .kn-tab-title { font-size: 0.74rem; }
+    .kn-tab-title { font-size: 0.76rem; }
 
-    .kn-viewer {
+    .kn-reader {
       width: 100%;
-      max-width: 340px;
+      max-width: 100%;
       margin: 0;
     }
 
-    .kn-info {
-      width: 100%;
-      max-width: 340px;
-      position: static;
-      padding-top: 0;
+    .kn-panel-grid,
+    .kn-panel-grid.no-media {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
     }
 
-    .kn-carousel-btn { opacity: 0.7; }
+    .kn-carousel-viewport {
+      aspect-ratio: 3 / 4;
+      width: 100%;
+    }
+
+    .kn-copy {
+      gap: 10px;
+    }
+
+    .kn-copy-head {
+      padding: 14px;
+    }
+
+    .kn-carousel-btn { opacity: 0.8; }
+
+    .kn-md-card {
+      padding: 16px 14px;
+      max-height: none;
+    }
+
+    .kn-panel-grid.no-media .kn-md-card {
+      max-height: min(72vh, 620px);
+      overflow: auto;
+      padding: 16px 14px;
+    }
   }
 </style>

@@ -1,12 +1,3 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PathTimeline from '../../components/PathTimeline.astro';
-import { paths } from '../../data/paths';
-import { projects } from '../../data/projects';
-
-const path = paths.find((p) => p.id === 'campus')!;
+return Astro.redirect('/cs/paths/campus', 301);
 ---
-
-<BaseLayout title={`${path.title} — 安静 · 计算机`} hub="cs">
-  <PathTimeline path={path} projects={projects} theme="green" backHref="/cs" backLabel="返回计算机" />
-</BaseLayout>

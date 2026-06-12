@@ -162,7 +162,7 @@ const t = themeMap[theme];
 
 <style>
   /* Hero */
-  .path-hero { padding: 48px 0 16px; }
+  .path-hero { padding: 24px 0 14px; }
 
   .back-link {
     display: inline-flex; align-items: center; gap: 6px;
@@ -182,7 +182,7 @@ const t = themeMap[theme];
     flex-shrink: 0;
   }
 
-  .hero-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+  .hero-title { font-size: 1.6rem; font-weight: 800; letter-spacing: 0; }
   .hero-sub { color: var(--text3); font-size: 0.88rem; }
   .hero-meta-row { display: flex; gap: 12px; align-items: stretch; }
 
@@ -211,12 +211,13 @@ const t = themeMap[theme];
   }
 
   .tl-card {
-    flex: 1; min-width: 0;
+    flex: 1 1 0; min-width: 140px;
     display: flex; flex-direction: column; align-items: center; gap: 6px;
     padding: 18px 14px; background: var(--surface2);
     border: 2px solid transparent; border-radius: var(--radius);
     cursor: pointer; transition: all var(--transition);
     font-family: inherit;
+    scroll-snap-align: start;
   }
   .tl-card:hover { box-shadow: var(--shadow); }
   .tl-card.active {
@@ -329,11 +330,48 @@ const t = themeMap[theme];
 
   /* Mobile */
   @media (max-width: 768px) {
-    .hero-row { gap: 12px; }
+    .path-hero { padding: 20px 0 12px; }
+
+    .hero-row {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+    }
+
+    .hero-title {
+      font-size: 1.2rem;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .hero-sub {
+      width: 100%;
+      font-size: 0.78rem;
+    }
+
     .hero-meta-row { flex-direction: column; gap: 10px; }
-    .tl-track { gap: 6px; }
-    .tl-card { min-width: 100px; padding: 14px 8px; }
-    .tl-name { font-size: 0.8rem; }
+
+    .tl-track {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      overflow: visible;
+      padding: 0;
+      margin: 0 0 20px;
+      scroll-snap-type: none;
+    }
+    .tl-card { width: 100%; min-width: 0; padding: 12px 8px; }
+    .tl-name { font-size: 0.76rem; white-space: normal; text-align: center; }
+    .tl-num { font-size: 0.66rem; padding: 3px 8px; }
+    .tl-dur { font-size: 0.68rem; }
+    .tl-arrow { display: none; }
+
     .res-grid { grid-template-columns: 1fr; }
+    .res-card { padding: 12px 14px; }
+    .res-name { font-size: 0.8rem; }
   }
 </style>

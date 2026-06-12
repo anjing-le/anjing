@@ -29,6 +29,7 @@ const {
     <title>{title}</title>
   </head>
   <body {...(hub ? { 'data-hub': hub } : {})}>
+    <Header />
     <main>
       <slot />
     </main>
@@ -39,5 +40,6 @@ const {
 <style>
   main {
     flex: 1;
+    padding-top: 56px;
   }
 </style>

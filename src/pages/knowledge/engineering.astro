@@ -1,11 +1,3 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import KnowledgePage from '../../components/KnowledgePage.astro';
-import { domains } from '../../data/knowledge';
-
-const domain = domains.find((d) => d.id === 'engineering')!;
+return Astro.redirect('/cs/knowledge/engineering', 301);
 ---
-
-<BaseLayout title={`${domain.title} — 安静 · 计算机`} hub="cs">
-  <KnowledgePage domain={domain} backHref="/cs" backLabel="返回计算机" />
-</BaseLayout>

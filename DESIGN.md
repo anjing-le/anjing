@@ -1,7 +1,7 @@
 # 安静 · 多赛道知识导航站 — 设计规范与开发指南
 
 > 本文档是整个站点的设计单一真实源，所有页面开发、赛道扩展、并行协作均以此为准。
-> 最后更新：2026-03-22
+> 最后更新：2026-05-21
 
 ---
 
@@ -19,6 +19,13 @@
 | 部署方式 | `git push` → Cloudflare Pages 自动构建部署（30-60s） |
 | 构建命令 | `npm run build` → 输出 `dist/` |
 | 提交身份 | `anjing`（不暴露 lvxianghe） |
+
+### 当前实现基线（2026-05-21）
+
+- 5 Hub 架构、动态 Hub/路径/知识路由和旧路由兼容仍保持稳定。
+- 计算机赛道 `cs-fundamentals` 首批 3 篇图文内容已接入，包含 Markdown 正文、cover 和内容图。
+- Header、Footer、HubHome、PathTimeline、KnowledgePage 与全局/首页样式已有全站体验打磨；Footer 第三卡当前用于“加微信聊聊”引流。
+- 构建验证：`npm run build` 通过，58 pages built；2026-05-21 15:48 未出现 CS 内容 duplicate id 警告。
 
 ---
 
@@ -400,14 +407,14 @@ anjing-site/src/
 
 | 模块 | 状态 | 说明 |
 |------|------|------|
-| 各赛道大纲定稿 | 🔲 | 5 赛道 × 4 知识域，条目标题/数量待逐一敲定（计算机已开始） |
-| 图文内容制作 | 🔲 | 用 AIGC 工具批量制作 cover + slides 图片，按大纲逐条填充 |
+| CS/LLM 目录定稿 | 🔲 | 当前优先敲定 `cs` 与 `llm` 两条目录，工作台见 `project_document/content-index.md` |
+| 图文内容制作 | 🔲 | 用 AIGC 工具批量制作 cover + slides 图片，按 CS/LLM 目录逐条填充 |
 | 知识域内容填充 | 🔲 | 除交易学 6 篇 md 外，其余全部 `draft: true` |
 | 微信二维码 | 🔲 | 当前为占位框，待替换真实图片 |
-| Header 导航栏 | 🔲 | 组件已有，当前未启用 |
+| Header 导航栏 | ✅ | 5-Hub 彩色圆点导航，固定顶部 56px |
 | CDN 静态资源加速 | 🔲 | `public/assets/hubs/` 目录已预留 |
 | 视频嵌入 | 🔲 | 数据结构已支持 `embedUrl`，渲染逻辑待实现 |
-| 旧路由清理 | 🔲 | `/paths/*` `/knowledge/*` 旧路由仍保留，可在确认无外部引用后删除 |
+| 旧路由清理 | ✅ | `/paths/*` `/knowledge/*` 8 个旧路由已改为 301 重定向 |
 
 ---
 
