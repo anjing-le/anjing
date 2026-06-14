@@ -215,7 +215,7 @@ const t = themeMap[theme];
     display: flex; flex-direction: column; align-items: center; gap: 6px;
     padding: 18px 14px; background: var(--surface2);
     border: 2px solid transparent; border-radius: var(--radius);
-    cursor: pointer; transition: all var(--transition);
+    cursor: var(--cursor-pointer); transition: all var(--transition);
     font-family: inherit;
     scroll-snap-align: start;
   }
@@ -290,7 +290,7 @@ const t = themeMap[theme];
     padding: 6px 16px; border-radius: 20px; border: none;
     background: var(--surface2); color: var(--text3);
     font-size: 0.82rem; font-weight: 500; font-family: inherit;
-    cursor: pointer; transition: all var(--transition);
+    cursor: var(--cursor-pointer); transition: all var(--transition);
   }
   .res-tab:hover { color: var(--text2); }
   .res-tab.active { background: var(--tl-soft); color: var(--tl-color); }
@@ -305,7 +305,7 @@ const t = themeMap[theme];
     display: flex; align-items: center; gap: 12px;
     padding: 14px 16px; background: var(--surface2);
     border-radius: var(--radius-sm); transition: all var(--transition);
-    cursor: default;
+    cursor: var(--cursor-default);
   }
   .res-card:hover { box-shadow: var(--shadow); }
 

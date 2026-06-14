@@ -268,7 +268,7 @@ const stageItems = readyItems.length > 0 ? readyItems : allItems;
     border-radius: 16px;
     border: none;
     background: rgba(255, 255, 255, 0.34);
-    cursor: pointer;
+    cursor: var(--cursor-pointer);
     display: flex;
     align-items: flex-start;
     gap: 8px;
@@ -409,7 +409,7 @@ const stageItems = readyItems.length > 0 ? readyItems : allItems;
     border-radius: 50%; border: none;
     background: rgba(255, 255, 255, 0.88);
     color: var(--text);
-    cursor: pointer;
+    cursor: var(--cursor-pointer);
     display: flex; align-items: center; justify-content: center;
     transition: all 0.2s;
     opacity: 0;
@@ -429,7 +429,7 @@ const stageItems = readyItems.length > 0 ? readyItems : allItems;
     width: 6px; height: 6px;
     border-radius: 999px; border: none;
     background: var(--text3); opacity: 0.3;
-    cursor: pointer; padding: 0;
+    cursor: var(--cursor-pointer); padding: 0;
     transition: all 0.2s;
   }
   .kn-dot.active { opacity: 1; background: var(--kn-color); width: 16px; }
