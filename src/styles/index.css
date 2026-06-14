@@ -10,14 +10,14 @@
 }
 
 .index-page {
-  min-height: calc(100svh - 56px);
+  min-height: 100svh;
 }
 
 .intro-screen {
-  min-height: calc(100svh - 56px);
+  min-height: 100svh;
   display: flex;
   align-items: center;
-  padding: 56px 0 42px;
+  padding: 0 0 42px;
 }
 
 .intro-container {
@@ -41,7 +41,7 @@
 }
 
 .tracks-screen {
-  min-height: calc(100svh - 56px);
+  min-height: 100svh;
   display: flex;
   align-items: center;
   padding: 58px 0 74px;

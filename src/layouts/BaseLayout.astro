@@ -7,12 +7,14 @@ interface Props {
   title: string;
   description?: string;
   hub?: string;
+  hideHeader?: boolean;
 }
 
 const {
   title,
   description = '安静 · 一线大模型应用工程师 | AI 实战项目 + 学习路径导航',
   hub,
+  hideHeader = false,
 } = Astro.props;
 ---
 
@@ -28,8 +30,8 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
   </head>
-  <body {...(hub ? { 'data-hub': hub } : {})}>
-    <Header />
+  <body class={hideHeader ? 'no-header' : undefined} {...(hub ? { 'data-hub': hub } : {})}>
+    {!hideHeader && <Header />}
     <main>
       <slot />
     </main>
@@ -41,5 +43,9 @@ const {
   main {
     flex: 1;
     padding-top: 56px;
+  }
+
+  body.no-header main {
+    padding-top: 0;
   }
 </style>
