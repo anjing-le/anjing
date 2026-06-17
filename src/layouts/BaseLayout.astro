@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -28,6 +29,7 @@ const {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <Analytics />
     <title>{title}</title>
   </head>
   <body class={hideHeader ? 'no-header' : undefined} {...(hub ? { 'data-hub': hub } : {})}>
