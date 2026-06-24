@@ -24,7 +24,7 @@
 
 - 5 Hub 架构、动态 Hub/路径/知识路由和旧路由兼容仍保持稳定。
 - 计算机赛道 `cs-fundamentals` 首批 3 篇图文内容已接入，包含 Markdown 正文、cover 和内容图。
-- Header、Footer、HubHome、PathTimeline、KnowledgePage 与全局/首页样式已有全站体验打磨；Footer 第三卡当前用于“加微信聊聊”引流。
+- Header、Footer、HubHome、PathTimeline、KnowledgePage 与全局/首页样式已有全站体验打磨；Footer 当前包含安静 AIGC、anjing music、安静 RichFree 与“加微信聊聊”引流入口。
 - 构建验证：`npm run build` 通过，58 pages built；2026-05-21 15:48 未出现 CS 内容 duplicate id 警告。
 
 ---
@@ -393,7 +393,7 @@ anjing-site/src/
 | 内容展示优先级 | ✅ | slides → Markdown → 占位卡片，三种模式自动切换 |
 | Markdown 内容管线 | ✅ | `import.meta.glob` 加载 md → KnowledgePage 渲染，prose 排版 |
 | 金融交易学内容 ×6 | ✅ | K线形态/量价均线/入场止损/持有退出/情绪纪律/认知偏差 |
-| Footer 引流卡片 | ✅ | 安静 AIGC + 安静 RichFree |
+| Footer 引流卡片 | ✅ | 安静 AIGC + anjing music + 安静 RichFree + 加微信聊聊 |
 | Favicon | ✅ | 蝴蝶图标（SVG），替换原粉紫字母 A |
 | 雾化消融效果 | ✅ | 全站统一卡片交互 |
 | 样式系统 | ✅ | CSS 变量、暖粉调色板、响应式、区块色块系统、虚线框 |
