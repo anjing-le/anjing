@@ -55,15 +55,10 @@ const projectLinks = [
             <div class="promo-back">属于你安静的音乐世界</div>
           </div>
         </a>
-        <div class="promo-card promo-static">
+        <div class="promo-card">
           <div class="promo-inner">
-            <div class="promo-front">anjing richfree</div>
-          </div>
-        </div>
-        <div class="promo-card promo-wechat">
-          <div class="promo-inner">
-            <div class="promo-front">加微信聊聊</div>
-            <div class="promo-back">扫码添加，备注来意<br/>交流技术 / 投研 / 合作</div>
+            <div class="promo-front">anjing rich free</div>
+            <div class="promo-back">请和我一起财富自由 谢谢</div>
           </div>
         </div>
       </div>
@@ -100,7 +95,7 @@ const projectLinks = [
   .footer-right {
     min-width: 0;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
   }
 
@@ -143,6 +138,7 @@ const projectLinks = [
     letter-spacing: 0;
     line-height: 1.55;
     padding: 14px 16px;
+    white-space: nowrap;
     transition: opacity 0.28s ease, transform 0.28s ease;
   }
 
@@ -171,11 +167,6 @@ const projectLinks = [
   .promo-card:hover .promo-back {
     opacity: 1;
     transform: scale(1);
-  }
-
-  .promo-static:hover .promo-front {
-    opacity: 1;
-    transform: none;
   }
 
   @media (hover: none) {
@@ -283,6 +274,12 @@ const projectLinks = [
       margin-top: 20px;
       padding: 12px 0;
       font-size: 0.72rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .footer-right {
+      grid-template-columns: 1fr;
     }
   }
 </style>
