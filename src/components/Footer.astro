@@ -46,7 +46,7 @@ const projectLinks = [
         <a href="https://aigc.anjing.cc" target="_blank" rel="noopener" class="promo-card">
           <div class="promo-inner">
             <div class="promo-front">anjing aigc</div>
-            <div class="promo-back">输入即创作，无需学设计<br/>小红书 / 抖音 / B站 多平台适配</div>
+            <div class="promo-back">输入即创作，无需学设计</div>
           </div>
         </a>
         <a href="https://music.anjing.cc" target="_blank" rel="noopener" class="promo-card">
@@ -55,10 +55,9 @@ const projectLinks = [
             <div class="promo-back">属于你安静的音乐世界</div>
           </div>
         </a>
-        <div class="promo-card">
+        <div class="promo-card promo-static">
           <div class="promo-inner">
             <div class="promo-front">anjing richfree</div>
-            <div class="promo-back">请早日财富自由 谢谢～</div>
           </div>
         </div>
         <div class="promo-card promo-wechat">
@@ -172,6 +171,11 @@ const projectLinks = [
   .promo-card:hover .promo-back {
     opacity: 1;
     transform: scale(1);
+  }
+
+  .promo-static:hover .promo-front {
+    opacity: 1;
+    transform: none;
   }
 
   @media (hover: none) {
