@@ -1,4 +1,5 @@
 ---
+const githubId = 'anjing-le';
 const xiaohongshuId = '8973452455';
 const douyinId = '49799361621';
 const wechatId = '18668247774';
@@ -13,6 +14,25 @@ const wechatId = '18668247774';
         <div class="footer-brand">安静</div>
         <p class="footer-desc">大模型yes工程师 / 这么一砸反而活了操盘手</p>
         <div class="footer-social">
+          <div class="social-contact social-github">
+            <a href="https://github.com/anjing-le" target="_blank" rel="noopener" class="social-link social-link--brand" title="GitHub" aria-label="GitHub">
+              <img src="/assets/social/github-icon.svg" alt="" width="22" height="22" loading="lazy" />
+            </a>
+            <div class="contact-popup contact-popup--compact" role="dialog" aria-label="GitHub">
+              <button
+                class="contact-id-card"
+                type="button"
+                data-copy-contact
+                data-copy-value={githubId}
+                data-copy-success="已复制 GitHub"
+                aria-label={`复制 GitHub 账号 ${githubId}`}
+              >
+                <strong>{githubId}</strong>
+              </button>
+              <div class="contact-copy-toast" data-copy-toast aria-live="polite"></div>
+            </div>
+          </div>
+
           <div class="social-contact social-xhs">
             <button class="social-link social-link--brand" type="button" title="小红书" aria-label="小红书" aria-haspopup="dialog">
               <img src="/assets/social/xiaohongshu-icon.png" alt="" width="22" height="22" loading="lazy" />
@@ -276,6 +296,16 @@ const wechatId = '18668247774';
     --contact-shadow: rgba(255, 36, 66, 0.12);
   }
 
+  .social-github {
+    --contact-color: #24292f;
+    --contact-soft: rgba(36, 41, 47, 0.08);
+    --contact-border: rgba(36, 41, 47, 0.2);
+    --contact-id-border: rgba(36, 41, 47, 0.14);
+    --contact-bg-start: rgba(248, 249, 250, 0.98);
+    --contact-bg-end: rgba(255, 255, 255, 0.98);
+    --contact-shadow: rgba(36, 41, 47, 0.1);
+  }
+
   .social-wechat {
     --contact-color: #1aad19;
     --contact-soft: rgba(26, 173, 25, 0.1);
@@ -328,6 +358,11 @@ const wechatId = '18668247774';
     z-index: 100;
   }
 
+  .contact-popup--compact {
+    width: 132px;
+    padding: 7px;
+  }
+
   .social-contact:hover .contact-popup,
   .social-contact:focus-within .contact-popup {
     opacity: 1;
@@ -350,6 +385,15 @@ const wechatId = '18668247774';
     border-top: 7px solid var(--contact-bg-end);
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
+  }
+
+  .contact-popup::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 14px;
   }
 
   .contact-id-card {
