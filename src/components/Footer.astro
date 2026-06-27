@@ -1,5 +1,6 @@
 ---
 const xiaohongshuId = '8973452455';
+const douyinId = '49799361621';
 const wechatId = '18668247774';
 ---
 
@@ -39,9 +40,32 @@ const wechatId = '18668247774';
             </div>
           </div>
 
-          <a href="https://www.douyin.com" target="_blank" rel="noopener" class="social-link social-link--brand" title="抖音" aria-label="抖音">
-            <img src="/assets/social/douyin-icon.png" alt="" width="22" height="22" loading="lazy" />
-          </a>
+          <div class="social-contact social-douyin">
+            <button class="social-link social-link--brand" type="button" title="抖音" aria-label="抖音" aria-haspopup="dialog">
+              <img src="/assets/social/douyin-icon.png" alt="" width="22" height="22" loading="lazy" />
+            </button>
+            <div class="contact-popup" role="dialog" aria-label="抖音">
+              <button
+                class="contact-id-card"
+                type="button"
+                data-copy-contact
+                data-copy-value={douyinId}
+                data-copy-success="已复制抖音号"
+                aria-label={`复制抖音号 ${douyinId}`}
+              >
+                <strong>{douyinId}</strong>
+              </button>
+              <div class="contact-copy-toast" data-copy-toast aria-live="polite"></div>
+              <img
+                class="contact-qr"
+                src="/assets/social/douyin-qr.png"
+                alt="抖音二维码"
+                width="166"
+                height="166"
+                loading="lazy"
+              />
+            </div>
+          </div>
 
           <div class="social-contact social-wechat">
             <button class="social-link social-link--brand" type="button" title="微信" aria-label="微信" aria-haspopup="dialog">
@@ -260,6 +284,20 @@ const wechatId = '18668247774';
     --contact-bg-start: rgba(246, 255, 248, 0.98);
     --contact-bg-end: rgba(255, 255, 255, 0.98);
     --contact-shadow: rgba(26, 173, 25, 0.12);
+  }
+
+  .social-douyin {
+    --contact-color: #151515;
+    --contact-soft: rgba(21, 21, 21, 0.08);
+    --contact-border: rgba(21, 21, 21, 0.22);
+    --contact-id-border: rgba(21, 21, 21, 0.14);
+    --contact-bg-start: rgba(248, 245, 239, 0.98);
+    --contact-bg-end: rgba(255, 255, 255, 0.98);
+    --contact-shadow: rgba(21, 21, 21, 0.12);
+  }
+
+  .social-douyin .contact-qr {
+    border-radius: 50%;
   }
 
   .social-contact:hover .social-link,
