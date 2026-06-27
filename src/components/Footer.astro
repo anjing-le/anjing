@@ -15,9 +15,17 @@ const wechatId = '18668247774';
         <p class="footer-desc">大模型yes工程师 / 这么一砸反而活了操盘手</p>
         <div class="footer-social">
           <div class="social-contact social-github">
-            <a href="https://github.com/anjing-le" target="_blank" rel="noopener" class="social-link social-link--brand" title="GitHub" aria-label="GitHub">
+            <button
+              class="social-link social-link--brand"
+              type="button"
+              title="GitHub"
+              aria-label="GitHub"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              data-contact-trigger
+            >
               <img src="/assets/social/github-icon.svg" alt="" width="22" height="22" loading="lazy" />
-            </a>
+            </button>
             <div class="contact-popup contact-popup--compact" role="dialog" aria-label="GitHub">
               <button
                 class="contact-id-card"
@@ -29,12 +37,13 @@ const wechatId = '18668247774';
               >
                 <strong>{githubId}</strong>
               </button>
+              <a class="contact-action-link" href="https://github.com/anjing-le" target="_blank" rel="noopener">打开 GitHub</a>
               <div class="contact-copy-toast" data-copy-toast aria-live="polite"></div>
             </div>
           </div>
 
           <div class="social-contact social-xhs">
-            <button class="social-link social-link--brand" type="button" title="小红书" aria-label="小红书" aria-haspopup="dialog">
+            <button class="social-link social-link--brand" type="button" title="小红书" aria-label="小红书" aria-haspopup="dialog" aria-expanded="false" data-contact-trigger>
               <img src="/assets/social/xiaohongshu-icon.png" alt="" width="22" height="22" loading="lazy" />
             </button>
             <div class="contact-popup" role="dialog" aria-label="小红书">
@@ -61,7 +70,7 @@ const wechatId = '18668247774';
           </div>
 
           <div class="social-contact social-douyin">
-            <button class="social-link social-link--brand" type="button" title="抖音" aria-label="抖音" aria-haspopup="dialog">
+            <button class="social-link social-link--brand" type="button" title="抖音" aria-label="抖音" aria-haspopup="dialog" aria-expanded="false" data-contact-trigger>
               <img src="/assets/social/douyin-icon.png" alt="" width="22" height="22" loading="lazy" />
             </button>
             <div class="contact-popup" role="dialog" aria-label="抖音">
@@ -88,7 +97,7 @@ const wechatId = '18668247774';
           </div>
 
           <div class="social-contact social-wechat">
-            <button class="social-link social-link--brand" type="button" title="微信" aria-label="微信" aria-haspopup="dialog">
+            <button class="social-link social-link--brand" type="button" title="微信" aria-label="微信" aria-haspopup="dialog" aria-expanded="false" data-contact-trigger>
               <img src="/assets/social/wechat-icon.svg" alt="" width="22" height="22" loading="lazy" />
             </button>
             <div class="contact-popup" role="dialog" aria-label="微信">
@@ -331,13 +340,15 @@ const wechatId = '18668247774';
   }
 
   .social-contact:hover .social-link,
-  .social-contact:focus-within .social-link {
+  .social-contact:focus-within .social-link,
+  .social-contact.is-open .social-link {
     background: var(--contact-soft);
     color: var(--contact-color);
   }
 
   .footer-left:has(.social-contact:hover) .footer-desc,
-  .footer-left:has(.social-contact:focus-within) .footer-desc {
+  .footer-left:has(.social-contact:focus-within) .footer-desc,
+  .footer-left:has(.social-contact.is-open) .footer-desc {
     opacity: 0;
   }
 
@@ -364,13 +375,15 @@ const wechatId = '18668247774';
   }
 
   .social-contact:hover .contact-popup,
-  .social-contact:focus-within .contact-popup {
+  .social-contact:focus-within .contact-popup,
+  .social-contact.is-open .contact-popup {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
   }
 
-  .footer-social:has(.social-contact:hover) .social-contact:not(:hover) .contact-popup {
+  .footer-social:has(.social-contact:hover) .social-contact:not(:hover) .contact-popup,
+  .footer-social:has(.social-contact.is-open) .social-contact:not(.is-open) .contact-popup {
     opacity: 0;
     visibility: hidden;
     transform: translateX(-50%) translateY(4px);
@@ -427,6 +440,29 @@ const wechatId = '18668247774';
 
   .contact-id-card.is-copied {
     border-color: var(--contact-border);
+  }
+
+  .contact-action-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    margin-top: 6px;
+    border-radius: 10px;
+    color: var(--contact-color);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background var(--transition), transform var(--transition);
+  }
+
+  .contact-action-link:hover,
+  .contact-action-link:focus-visible {
+    background: var(--contact-soft);
+    outline: none;
+    transform: translateY(-1px);
   }
 
   .contact-copy-toast {
@@ -489,7 +525,16 @@ const wechatId = '18668247774';
     .footer-left { text-align: center; }
     .footer-brand { font-size: 1rem; }
     .footer-desc { font-size: 0.78rem; }
-    .footer-social { justify-content: center; }
+    .footer-social { justify-content: center; gap: 10px; }
+    .social-link {
+      width: 40px;
+      height: 40px;
+      touch-action: manipulation;
+    }
+    .social-link--brand img {
+      width: 23px;
+      height: 23px;
+    }
     .footer-right {
       max-width: 100%;
       gap: 10px;
@@ -516,18 +561,80 @@ const wechatId = '18668247774';
     .footer-right {
       grid-template-columns: 1fr;
     }
+
+    .social-contact:last-child .contact-popup {
+      left: auto;
+      right: 0;
+      transform: translateY(4px);
+    }
+
+    .social-contact:last-child:hover .contact-popup,
+    .social-contact:last-child:focus-within .contact-popup,
+    .social-contact:last-child.is-open .contact-popup {
+      transform: translateY(0);
+    }
+
+    .footer-social:has(.social-contact:hover) .social-contact:last-child:not(:hover) .contact-popup,
+    .footer-social:has(.social-contact.is-open) .social-contact:last-child:not(.is-open) .contact-popup {
+      transform: translateY(4px);
+    }
+
+    .social-contact:last-child .contact-popup::after {
+      left: auto;
+      right: 13px;
+      transform: none;
+    }
   }
 </style>
 
 <script>
+  const contactItems = Array.from(document.querySelectorAll('.social-contact'));
+
+  const setContactOpen = (contact, isOpen) => {
+    contact.classList.toggle('is-open', isOpen);
+    contact.querySelector('[data-contact-trigger]')?.setAttribute('aria-expanded', String(isOpen));
+  };
+
+  const closeContactPopups = (except) => {
+    contactItems.forEach((contact) => {
+      if (contact !== except) setContactOpen(contact, false);
+    });
+  };
+
+  contactItems.forEach((contact) => {
+    const trigger = contact.querySelector('[data-contact-trigger]');
+    if (!trigger) return;
+
+    trigger.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const nextOpen = !contact.classList.contains('is-open');
+      closeContactPopups(contact);
+      setContactOpen(contact, nextOpen);
+    });
+  });
+
+  document.addEventListener('pointerdown', (event) => {
+    const target = event.target;
+    if (target instanceof Element && target.closest('.social-contact')) return;
+    closeContactPopups();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeContactPopups();
+  });
+
   const copyWithFallback = (value) => {
     const textarea = document.createElement('textarea');
     textarea.value = value;
     textarea.setAttribute('readonly', '');
     textarea.style.position = 'fixed';
-    textarea.style.top = '-9999px';
+    textarea.style.inset = '0 auto auto 0';
+    textarea.style.opacity = '0';
+    textarea.style.pointerEvents = 'none';
     document.body.appendChild(textarea);
+    textarea.focus({ preventScroll: true });
     textarea.select();
+    textarea.setSelectionRange(0, textarea.value.length);
     const copied = document.execCommand('copy');
     textarea.remove();
     return copied;
@@ -535,13 +642,19 @@ const wechatId = '18668247774';
 
   document.querySelectorAll('[data-copy-contact]').forEach((button) => {
     button.addEventListener('click', async () => {
+      const contact = button.closest('.social-contact');
+      if (contact) {
+        closeContactPopups(contact);
+        setContactOpen(contact, true);
+      }
+
       const value = button.getAttribute('data-copy-value') || '';
       const successText = button.getAttribute('data-copy-success') || '已复制';
       const toast = button.parentElement?.querySelector('[data-copy-toast]');
       let copied = false;
 
       try {
-        if (navigator.clipboard) {
+        if (navigator.clipboard && window.isSecureContext) {
           await navigator.clipboard.writeText(value);
           copied = true;
         }
@@ -549,7 +662,9 @@ const wechatId = '18668247774';
         copied = false;
       }
 
-      if (!copied) copied = copyWithFallback(value);
+      if (!copied) {
+        copied = copyWithFallback(value);
+      }
 
       if (toast) {
         toast.textContent = copied ? successText : '复制失败';
