@@ -1,23 +1,6 @@
 ---
-import Icon from './Icon.astro';
-
-const socials = [
-  { name: 'GitHub', url: 'https://github.com/anjing-le', icon: 'github' },
-];
-
-const pendingSocials = [
-  { name: '抖音', icon: 'play' },
-  { name: 'B站', icon: 'presentation' },
-];
-
-const projectLinks = [
-  { name: '智能知识库 RAG', url: '/projects/knowledge' },
-  { name: 'AIGC 多模态创作', url: '/projects/aigc' },
-  { name: '智能电商客服', url: '/projects/customer-service' },
-  { name: 'AI 开发脚手架', url: '/projects/scaffolding' },
-];
-
 const xiaohongshuId = '8973452455';
+const wechatId = '18668247774';
 ---
 
 <footer class="footer">
@@ -29,28 +12,24 @@ const xiaohongshuId = '8973452455';
         <div class="footer-brand">安静</div>
         <p class="footer-desc">大模型yes工程师 / 这么一砸反而活了操盘手</p>
         <div class="footer-social">
-          {socials.map((s) => (
-            <a href={s.url} target="_blank" rel="noopener" class="social-link" title={s.name} aria-label={s.name}>
-              <Icon name={s.icon} size={18} strokeWidth={1.5} />
-            </a>
-          ))}
-          <div class="social-xhs">
-            <button class="social-link xhs-trigger" type="button" title="小红书" aria-label="小红书" aria-haspopup="dialog">
-              <Icon name="book-open" size={18} strokeWidth={1.5} />
+          <div class="social-contact social-xhs">
+            <button class="social-link social-link--brand" type="button" title="小红书" aria-label="小红书" aria-haspopup="dialog">
+              <img src="/assets/social/xiaohongshu-icon.png" alt="" width="22" height="22" loading="lazy" />
             </button>
-            <div class="xhs-popup" role="dialog" aria-label="小红书">
+            <div class="contact-popup" role="dialog" aria-label="小红书">
               <button
-                class="xhs-id-card"
+                class="contact-id-card"
                 type="button"
-                data-copy-xhs
+                data-copy-contact
                 data-copy-value={xiaohongshuId}
+                data-copy-success="已复制小红书号"
                 aria-label={`复制小红书号 ${xiaohongshuId}`}
               >
                 <strong>{xiaohongshuId}</strong>
               </button>
-              <div class="xhs-copy-toast" data-copy-toast aria-live="polite"></div>
+              <div class="contact-copy-toast" data-copy-toast aria-live="polite"></div>
               <img
-                class="xhs-qr"
+                class="contact-qr"
                 src="/assets/social/xiaohongshu-qr.png"
                 alt="小红书二维码"
                 width="166"
@@ -59,17 +38,35 @@ const xiaohongshuId = '8973452455';
               />
             </div>
           </div>
-          {pendingSocials.map((s) => (
-            <span class="social-link social-link--pending" title={`${s.name}（待补充）`} aria-label={`${s.name}（待补充）`}>
-              <Icon name={s.icon} size={18} strokeWidth={1.5} />
-            </span>
-          ))}
-          <div class="social-wechat">
-            <span class="social-link" title="微信" aria-label="微信">
-              <Icon name="message-circle" size={18} strokeWidth={1.5} />
-            </span>
-            <div class="wechat-popup">
-              <div class="wechat-qr"></div>
+
+          <a href="https://www.douyin.com" target="_blank" rel="noopener" class="social-link social-link--brand" title="抖音" aria-label="抖音">
+            <img src="/assets/social/douyin-icon.png" alt="" width="22" height="22" loading="lazy" />
+          </a>
+
+          <div class="social-contact social-wechat">
+            <button class="social-link social-link--brand" type="button" title="微信" aria-label="微信" aria-haspopup="dialog">
+              <img src="/assets/social/wechat-icon.svg" alt="" width="22" height="22" loading="lazy" />
+            </button>
+            <div class="contact-popup" role="dialog" aria-label="微信">
+              <button
+                class="contact-id-card"
+                type="button"
+                data-copy-contact
+                data-copy-value={wechatId}
+                data-copy-success="已复制微信号"
+                aria-label={`复制微信号 ${wechatId}`}
+              >
+                <strong>{wechatId}</strong>
+              </button>
+              <div class="contact-copy-toast" data-copy-toast aria-live="polite"></div>
+              <img
+                class="contact-qr"
+                src="/assets/social/wechat-qr.png"
+                alt="微信二维码"
+                width="166"
+                height="166"
+                loading="lazy"
+              />
             </div>
           </div>
         </div>
@@ -226,6 +223,7 @@ const xiaohongshuId = '8973452455';
     width: 34px; height: 34px; border-radius: var(--radius-sm);
     background: var(--surface2); color: var(--text3); transition: all var(--transition);
     cursor: var(--cursor-pointer);
+    text-decoration: none;
   }
 
   button.social-link {
@@ -236,41 +234,55 @@ const xiaohongshuId = '8973452455';
 
   .social-link:hover { background: var(--pink-soft); color: var(--pink); }
 
-  .social-link--pending {
-    opacity: 0.52;
-    cursor: default;
+  .social-link--brand img {
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    display: block;
   }
 
-  .social-link--pending:hover {
-    background: var(--surface2);
-    color: var(--text3);
-  }
-
-  .social-xhs {
+  .social-contact {
     position: relative;
+    --contact-color: #ff2442;
+    --contact-soft: rgba(255, 36, 66, 0.1);
+    --contact-border: rgba(255, 36, 66, 0.34);
+    --contact-id-border: rgba(255, 36, 66, 0.22);
+    --contact-bg-start: rgba(255, 247, 249, 0.98);
+    --contact-bg-end: rgba(255, 255, 255, 0.98);
+    --contact-shadow: rgba(255, 36, 66, 0.12);
   }
 
-  .xhs-trigger:hover,
-  .social-xhs:focus-within .xhs-trigger {
-    background: rgba(255, 36, 66, 0.1);
-    color: #ff2442;
+  .social-wechat {
+    --contact-color: #1aad19;
+    --contact-soft: rgba(26, 173, 25, 0.1);
+    --contact-border: rgba(26, 173, 25, 0.28);
+    --contact-id-border: rgba(26, 173, 25, 0.18);
+    --contact-bg-start: rgba(246, 255, 248, 0.98);
+    --contact-bg-end: rgba(255, 255, 255, 0.98);
+    --contact-shadow: rgba(26, 173, 25, 0.12);
   }
 
-  .footer-left:has(.social-xhs:hover) .footer-desc,
-  .footer-left:has(.social-xhs:focus-within) .footer-desc {
+  .social-contact:hover .social-link,
+  .social-contact:focus-within .social-link {
+    background: var(--contact-soft);
+    color: var(--contact-color);
+  }
+
+  .footer-left:has(.social-contact:hover) .footer-desc,
+  .footer-left:has(.social-contact:focus-within) .footer-desc {
     opacity: 0;
   }
 
-  .xhs-popup {
+  .contact-popup {
     position: absolute;
     bottom: calc(100% + 12px);
     left: 50%;
     width: 184px;
     padding: 8px;
-    border: 1px solid rgba(255, 36, 66, 0.34);
+    border: 1px solid var(--contact-border);
     border-radius: 16px;
-    background: linear-gradient(180deg, rgba(255, 247, 249, 0.98), rgba(255, 255, 255, 0.98));
-    box-shadow: 0 18px 48px rgba(255, 36, 66, 0.12), 0 10px 32px rgba(45, 42, 40, 0.08);
+    background: linear-gradient(180deg, var(--contact-bg-start), var(--contact-bg-end));
+    box-shadow: 0 18px 48px var(--contact-shadow), 0 10px 32px rgba(45, 42, 40, 0.08);
     transform: translateX(-50%) translateY(4px);
     opacity: 0;
     visibility: hidden;
@@ -278,27 +290,33 @@ const xiaohongshuId = '8973452455';
     z-index: 100;
   }
 
-  .social-xhs:hover .xhs-popup,
-  .social-xhs:focus-within .xhs-popup {
+  .social-contact:hover .contact-popup,
+  .social-contact:focus-within .contact-popup {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
   }
 
-  .xhs-popup::after {
+  .footer-social:has(.social-contact:hover) .social-contact:not(:hover) .contact-popup {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(4px);
+  }
+
+  .contact-popup::after {
     content: '';
     position: absolute;
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    border-top: 7px solid rgba(255, 247, 249, 0.98);
+    border-top: 7px solid var(--contact-bg-end);
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
   }
 
-  .xhs-id-card {
+  .contact-id-card {
     width: 100%;
-    border: 1px solid rgba(255, 36, 66, 0.22);
+    border: 1px solid var(--contact-id-border);
     border-radius: 12px;
     padding: 8px 10px;
     background: rgba(255, 255, 255, 0.82);
@@ -311,34 +329,34 @@ const xiaohongshuId = '8973452455';
     transition: border-color var(--transition), background var(--transition), transform var(--transition);
   }
 
-  .xhs-id-card:hover,
-  .xhs-id-card:focus-visible {
-    border-color: rgba(255, 36, 66, 0.48);
+  .contact-id-card:hover,
+  .contact-id-card:focus-visible {
+    border-color: var(--contact-border);
     background: #fff;
     transform: translateY(-1px);
     outline: none;
   }
 
-  .xhs-id-card strong {
+  .contact-id-card strong {
     font-size: 0.94rem;
     letter-spacing: 0;
     white-space: nowrap;
   }
 
-  .xhs-id-card.is-copied {
-    border-color: rgba(255, 36, 66, 0.58);
+  .contact-id-card.is-copied {
+    border-color: var(--contact-border);
   }
 
-  .xhs-copy-toast {
+  .contact-copy-toast {
     position: absolute;
     top: 0;
     left: 50%;
     z-index: 1;
     padding: 6px 10px;
     border-radius: 999px;
-    background: #ff2442;
+    background: var(--contact-color);
     color: #fff;
-    box-shadow: 0 10px 24px rgba(255, 36, 66, 0.2);
+    box-shadow: 0 10px 24px var(--contact-shadow);
     font-size: 0.72rem;
     line-height: 1;
     white-space: nowrap;
@@ -349,13 +367,13 @@ const xiaohongshuId = '8973452455';
     transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
   }
 
-  .xhs-copy-toast.is-visible {
+  .contact-copy-toast.is-visible {
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, -30px) scale(1);
   }
 
-  .xhs-qr {
+  .contact-qr {
     display: block;
     width: 100%;
     height: auto;
@@ -363,47 +381,6 @@ const xiaohongshuId = '8973452455';
     border-radius: 11px;
     background: #fff;
     box-shadow: inset 0 0 0 1px rgba(45, 42, 40, 0.04);
-  }
-
-  .social-wechat {
-    position: relative;
-  }
-
-  .wechat-popup {
-    position: absolute;
-    bottom: calc(100% + 12px);
-    left: 50%;
-    transform: translateX(-50%) translateY(4px);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 100;
-  }
-
-  .social-wechat:hover .wechat-popup {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  .wechat-qr {
-    width: 120px;
-    height: 120px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-hover);
-  }
-
-  .wechat-qr::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border-top: 6px solid var(--surface);
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
   }
 
   .footer-heading {
@@ -431,20 +408,6 @@ const xiaohongshuId = '8973452455';
     .footer-brand { font-size: 1rem; }
     .footer-desc { font-size: 0.78rem; }
     .footer-social { justify-content: center; }
-    .xhs-popup {
-      left: auto;
-      right: -36px;
-      transform: translateY(4px);
-    }
-    .social-xhs:hover .xhs-popup,
-    .social-xhs:focus-within .xhs-popup {
-      transform: translateY(0);
-    }
-    .xhs-popup::after {
-      left: auto;
-      right: 48px;
-      transform: none;
-    }
     .footer-right {
       max-width: 100%;
       gap: 10px;
@@ -488,9 +451,10 @@ const xiaohongshuId = '8973452455';
     return copied;
   };
 
-  document.querySelectorAll('[data-copy-xhs]').forEach((button) => {
+  document.querySelectorAll('[data-copy-contact]').forEach((button) => {
     button.addEventListener('click', async () => {
       const value = button.getAttribute('data-copy-value') || '';
+      const successText = button.getAttribute('data-copy-success') || '已复制';
       const toast = button.parentElement?.querySelector('[data-copy-toast]');
       let copied = false;
 
@@ -506,7 +470,7 @@ const xiaohongshuId = '8973452455';
       if (!copied) copied = copyWithFallback(value);
 
       if (toast) {
-        toast.textContent = copied ? '已复制小红书号' : '复制失败';
+        toast.textContent = copied ? successText : '复制失败';
         toast.classList.add('is-visible');
       }
       button.classList.toggle('is-copied', copied);
