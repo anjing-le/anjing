@@ -3,9 +3,11 @@ import Icon from './Icon.astro';
 
 const socials = [
   { name: 'GitHub', url: 'https://github.com/anjing-le', icon: 'github' },
-  { name: '小红书', url: 'https://www.xiaohongshu.com/user/profile/64845718000000002a035fc5', icon: 'globe' },
-  { name: 'X', url: '#', icon: 'compass' },
-  { name: 'B站', url: '#', icon: 'presentation' },
+];
+
+const pendingSocials = [
+  { name: '抖音', icon: 'play' },
+  { name: 'B站', icon: 'presentation' },
 ];
 
 const projectLinks = [
@@ -14,6 +16,8 @@ const projectLinks = [
   { name: '智能电商客服', url: '/projects/customer-service' },
   { name: 'AI 开发脚手架', url: '/projects/scaffolding' },
 ];
+
+const xiaohongshuId = '8973452455';
 ---
 
 <footer class="footer">
@@ -29,6 +33,30 @@ const projectLinks = [
             <a href={s.url} target="_blank" rel="noopener" class="social-link" title={s.name} aria-label={s.name}>
               <Icon name={s.icon} size={18} strokeWidth={1.5} />
             </a>
+          ))}
+          <div class="social-xhs">
+            <button class="social-link xhs-trigger" type="button" title="小红书" aria-label="小红书" aria-haspopup="dialog">
+              <Icon name="book-open" size={18} strokeWidth={1.5} />
+            </button>
+            <div class="xhs-popup" role="dialog" aria-label="小红书">
+              <button class="xhs-id-card" type="button" data-copy-xhs data-copy-value={xiaohongshuId}>
+                <strong>{xiaohongshuId}</strong>
+                <span data-copy-state>点击复制</span>
+              </button>
+              <img
+                class="xhs-qr"
+                src="/assets/social/xiaohongshu-qr.png"
+                alt="小红书二维码"
+                width="190"
+                height="190"
+                loading="lazy"
+              />
+            </div>
+          </div>
+          {pendingSocials.map((s) => (
+            <span class="social-link social-link--pending" title={`${s.name}（待补充）`} aria-label={`${s.name}（待补充）`}>
+              <Icon name={s.icon} size={18} strokeWidth={1.5} />
+            </span>
           ))}
           <div class="social-wechat">
             <span class="social-link" title="微信" aria-label="微信">
@@ -187,7 +215,118 @@ const projectLinks = [
     background: var(--surface2); color: var(--text3); transition: all var(--transition);
     cursor: var(--cursor-pointer);
   }
+
+  button.social-link {
+    border: 0;
+    padding: 0;
+    font: inherit;
+  }
+
   .social-link:hover { background: var(--pink-soft); color: var(--pink); }
+
+  .social-link--pending {
+    opacity: 0.52;
+    cursor: default;
+  }
+
+  .social-link--pending:hover {
+    background: var(--surface2);
+    color: var(--text3);
+  }
+
+  .social-xhs {
+    position: relative;
+  }
+
+  .xhs-trigger:hover,
+  .social-xhs:focus-within .xhs-trigger {
+    background: rgba(255, 36, 66, 0.1);
+    color: #ff2442;
+  }
+
+  .xhs-popup {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    width: 218px;
+    padding: 12px;
+    border: 1px solid rgba(255, 36, 66, 0.34);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255, 247, 249, 0.98), rgba(255, 255, 255, 0.98));
+    box-shadow: 0 18px 48px rgba(255, 36, 66, 0.12), 0 10px 32px rgba(45, 42, 40, 0.08);
+    transform: translateX(-50%) translateY(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+  }
+
+  .social-xhs:hover .xhs-popup,
+  .social-xhs:focus-within .xhs-popup {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .xhs-popup::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top: 7px solid rgba(255, 247, 249, 0.98);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+  }
+
+  .xhs-id-card {
+    width: 100%;
+    border: 1px solid rgba(255, 36, 66, 0.22);
+    border-radius: 13px;
+    padding: 9px 10px;
+    background: rgba(255, 255, 255, 0.82);
+    color: var(--text);
+    cursor: var(--cursor-pointer);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    transition: border-color var(--transition), background var(--transition), transform var(--transition);
+  }
+
+  .xhs-id-card:hover,
+  .xhs-id-card:focus-visible {
+    border-color: rgba(255, 36, 66, 0.48);
+    background: #fff;
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  .xhs-id-card strong {
+    font-size: 0.92rem;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  .xhs-id-card span {
+    color: #ff2442;
+    font-size: 0.68rem;
+    white-space: nowrap;
+  }
+
+  .xhs-id-card.is-copied {
+    border-color: rgba(255, 36, 66, 0.58);
+  }
+
+  .xhs-qr {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px rgba(45, 42, 40, 0.04);
+  }
 
   .social-wechat {
     position: relative;
@@ -255,6 +394,20 @@ const projectLinks = [
     .footer-brand { font-size: 1rem; }
     .footer-desc { font-size: 0.78rem; }
     .footer-social { justify-content: center; }
+    .xhs-popup {
+      left: auto;
+      right: -54px;
+      transform: translateY(4px);
+    }
+    .social-xhs:hover .xhs-popup,
+    .social-xhs:focus-within .xhs-popup {
+      transform: translateY(0);
+    }
+    .xhs-popup::after {
+      left: auto;
+      right: 66px;
+      transform: none;
+    }
     .footer-right {
       max-width: 100%;
       gap: 10px;
@@ -283,3 +436,45 @@ const projectLinks = [
     }
   }
 </style>
+
+<script>
+  const copyWithFallback = (value) => {
+    const textarea = document.createElement('textarea');
+    textarea.value = value;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    const copied = document.execCommand('copy');
+    textarea.remove();
+    return copied;
+  };
+
+  document.querySelectorAll('[data-copy-xhs]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const value = button.getAttribute('data-copy-value') || '';
+      const state = button.querySelector('[data-copy-state]');
+      let copied = false;
+
+      try {
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(value);
+          copied = true;
+        }
+      } catch {
+        copied = false;
+      }
+
+      if (!copied) copied = copyWithFallback(value);
+
+      if (state) state.textContent = copied ? '已复制' : '复制失败';
+      button.classList.toggle('is-copied', copied);
+
+      window.setTimeout(() => {
+        if (state) state.textContent = '点击复制';
+        button.classList.remove('is-copied');
+      }, 1500);
+    });
+  });
+</script>
