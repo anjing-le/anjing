@@ -864,4 +864,86 @@ export const domains: KnowledgeDomain[] = [
       ]},
     ],
   },
+
+  // ─── 音乐 Hub ───
+  {
+    hub: 'music',
+    id: 'listening',
+    title: '聆听与审美',
+    subtitle: '听歌 / 专辑 / 歌单',
+    description: '喜欢也可以被理解。',
+    icon: 'headphones',
+    color: 'var(--yellow)',
+    soft: 'var(--yellow-soft)',
+    groups: [
+      { id: 'music-listening', title: '听歌方法', summary: '从情绪走向声音的细节。', items: [
+        { id: 'music-1', title: '怎样认真听一首歌', summary: '从第一感受到分层聆听，建立自己的听歌方法。', type: 'doc', draft: true },
+        { id: 'music-2', title: '怎样写听歌记录', summary: '不用专业术语，也能准确留下被打动的瞬间。', type: 'doc', draft: true },
+      ]},
+      { id: 'music-albums', title: '专辑与歌单', summary: '让零散的歌重新产生联系。', items: [
+        { id: 'music-3', title: '为什么要完整听一张专辑', summary: '把单曲放回作品的顺序、主题和时代里。', type: 'doc', draft: true },
+        { id: 'music-4', title: '建立一张真正属于你的歌单', summary: '不按标签堆歌，用情绪、记忆与关系组织声音。', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'music',
+    id: 'music-theory',
+    title: '乐理与结构',
+    subtitle: '节奏 / 旋律 / 和声',
+    description: '听懂一首歌是怎么成立的。',
+    icon: 'book-open',
+    color: 'var(--cyan)',
+    soft: 'var(--cyan-soft)',
+    groups: [
+      { id: 'music-rhythm-melody', title: '节奏与旋律', summary: '音乐如何流动并被记住。', items: [
+        { id: 'music-5', title: '节奏、拍子和律动', summary: '从身体能感受到的部分开始理解时间。', type: 'doc', draft: true },
+        { id: 'music-6', title: '旋律为什么会留在脑海里', summary: '认识动机、重复、变化与旋律走向。', type: 'doc', draft: true },
+      ]},
+      { id: 'music-harmony-form', title: '和声与结构', summary: '情绪如何被组织成完整作品。', items: [
+        { id: 'music-7', title: '听懂基础和弦进行', summary: '从熟悉的流行歌曲理解和声的推动力。', type: 'doc', draft: true },
+        { id: 'music-8', title: '主歌、副歌与桥段', summary: '拆开一首歌，看看各个段落如何彼此配合。', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'music',
+    id: 'sound-production',
+    title: '声音与制作',
+    subtitle: '音色 / 编曲 / 混音',
+    description: '声音也有它自己的质地。',
+    icon: 'settings',
+    color: 'var(--purple)',
+    soft: 'var(--purple-soft)',
+    groups: [
+      { id: 'music-timbre-arrangement', title: '音色与编曲', summary: '一个想法如何长成一首歌。', items: [
+        { id: 'music-9', title: '听懂常见乐器与音色', summary: '认识声音的来源、质感和它在作品里的位置。', type: 'doc', draft: true },
+        { id: 'music-10', title: '编曲在做什么', summary: '从层次、密度和动态理解歌曲的展开。', type: 'doc', draft: true },
+      ]},
+      { id: 'music-recording-mix', title: '录音与混音', summary: '让不同声音清楚地站在一起。', items: [
+        { id: 'music-11', title: '个人录音的最小配置', summary: '用刚刚够用的设备，留下干净可靠的声音。', type: 'doc', draft: true },
+        { id: 'music-12', title: '第一次理解混音', summary: '音量、声像、频率与空间的基础关系。', type: 'doc', draft: true },
+      ]},
+    ],
+  },
+  {
+    hub: 'music',
+    id: 'music-culture',
+    title: '音乐与文化',
+    subtitle: '流派 / 时代 / 现场',
+    description: '听见声音背后的世界。',
+    icon: 'globe',
+    color: 'var(--pink)',
+    soft: 'var(--pink-soft)',
+    groups: [
+      { id: 'music-genres-scenes', title: '流派与场景', summary: '音乐如何从生活里生长出来。', items: [
+        { id: 'music-13', title: '从流派标签回到真实音乐', summary: '把标签当地图，而不是限制听觉的边界。', type: 'doc', draft: true },
+        { id: 'music-14', title: '城市、俱乐部与音乐现场', summary: '理解声音与空间、社群之间的关系。', type: 'doc', draft: true },
+      ]},
+      { id: 'music-artists-eras', title: '音乐人与时代', summary: '作品从来不是凭空出现的。', items: [
+        { id: 'music-15', title: '怎样认识一个音乐人', summary: '从作品、经历与影响关系建立完整印象。', type: 'doc', draft: true },
+        { id: 'music-16', title: '技术如何改变音乐', summary: '从录音、合成器到流媒体，理解听觉的变化。', type: 'doc', draft: true },
+      ]},
+    ],
+  },
 ];

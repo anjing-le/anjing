@@ -54,4 +54,13 @@ export const hubs: HubEntry[] = [
     color: 'var(--orange)',
     items: ['美食地图 / 烹饪食谱 / 食材百科', '家常 · 烘焙 · 异国料理', '从厨房到餐桌的完整链路'],
   },
+  {
+    id: 'music',
+    title: '音乐',
+    subtitle: '聆听 · 理解 · 表达',
+    description: '认真听歌，也慢慢理解声音为什么会打动人。',
+    href: '/music',
+    color: 'var(--yellow)',
+    items: ['歌单 / 专辑 / 现场 / 创作', '旋律 · 节奏 · 和声 · 音色', '留下真正喜欢的声音'],
+  },
 ];

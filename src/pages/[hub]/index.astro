@@ -23,6 +23,11 @@ import {
   foodPathCards,
   foodKnowledgeCards,
 } from '../../data/food-home';
+import {
+  musicTrioCards,
+  musicPathCards,
+  musicKnowledgeCards,
+} from '../../data/music-home';
 
 const hub = Astro.params.hub;
 export function getStaticPaths() {
@@ -32,6 +37,7 @@ export function getStaticPaths() {
     { params: { hub: 'body' } },
     { params: { hub: 'photo' } },
     { params: { hub: 'food' } },
+    { params: { hub: 'music' } },
   ];
 }
 
@@ -126,6 +132,13 @@ const hubs: Record<string, any> = {
     trioCards: foodTrioCards,
     pathCards: foodPathCards,
     knowledgeCards: foodKnowledgeCards,
+    pathLead: '',
+  },
+  music: {
+    title: '音乐',
+    trioCards: musicTrioCards,
+    pathCards: musicPathCards,
+    knowledgeCards: musicKnowledgeCards,
     pathLead: '',
   },
 };
