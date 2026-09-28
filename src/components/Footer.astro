@@ -171,7 +171,7 @@ const douyinProfileUrl = 'https://www.douyin.com/user/MS4wLjABAAAAlcUCj0KCZHWgEQ
   .footer-grid {
     display: grid;
     grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.8fr);
-    align-items: stretch;
+    align-items: start;
     gap: 32px;
   }
 
@@ -189,13 +189,13 @@ const douyinProfileUrl = 'https://www.douyin.com/user/MS4wLjABAAAAlcUCj0KCZHWgEQ
   .footer-right {
     min-width: 0;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
     gap: 12px;
   }
 
   .promo-card {
     min-width: 0;
-    min-height: 96px;
+    min-height: 118px;
     border-radius: var(--radius-lg);
     text-decoration: none;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
@@ -214,9 +214,10 @@ const douyinProfileUrl = 'https://www.douyin.com/user/MS4wLjABAAAAlcUCj0KCZHWgEQ
 
   .promo-inner {
     display: grid;
+    min-width: 0;
+    min-height: 118px;
     border-radius: var(--radius-lg);
     overflow: hidden;
-    height: 100%;
   }
 
   .promo-front,
@@ -232,7 +233,8 @@ const douyinProfileUrl = 'https://www.douyin.com/user/MS4wLjABAAAAlcUCj0KCZHWgEQ
     letter-spacing: 0;
     line-height: 1.55;
     padding: 14px 16px;
-    white-space: nowrap;
+    min-width: 0;
+    overflow-wrap: anywhere;
     transition: opacity 0.28s ease, transform 0.28s ease;
   }
 
@@ -246,6 +248,7 @@ const douyinProfileUrl = 'https://www.douyin.com/user/MS4wLjABAAAAlcUCj0KCZHWgEQ
   }
 
   .promo-back {
+    border: 1px solid rgba(45, 42, 40, 0.08);
     color: var(--text2);
     background: var(--surface2);
     opacity: 0;
@@ -522,10 +525,14 @@ const douyinProfileUrl = 'https://www.douyin.com/user/MS4wLjABAAAAlcUCj0KCZHWgEQ
     text-align: center; color: var(--text3); font-size: 0.8rem;
   }
 
+  @media (max-width: 1000px) {
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+
   @media (max-width: 768px) {
     .footer { padding: 28px 0 0; }
     .footer-inner { padding: 0 18px; }
-    .footer-grid { grid-template-columns: 1fr; gap: 20px; }
+    .footer-grid { gap: 20px; }
     .footer-left { text-align: center; }
     .footer-brand { font-size: 1rem; }
     .footer-desc { font-size: 0.78rem; }
@@ -542,17 +549,11 @@ const douyinProfileUrl = 'https://www.douyin.com/user/MS4wLjABAAAAlcUCj0KCZHWgEQ
     .footer-right {
       max-width: 100%;
       gap: 10px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .promo-card {
-      min-width: 0;
-      min-height: 76px;
     }
     .promo-front,
     .promo-back {
       font-size: 0.76rem;
       padding: 16px 12px;
-      min-height: 72px;
     }
     .footer-bottom {
       margin-top: 20px;
@@ -561,11 +562,16 @@ const douyinProfileUrl = 'https://www.douyin.com/user/MS4wLjABAAAAlcUCj0KCZHWgEQ
     }
   }
 
-  @media (max-width: 360px) {
+  @media (max-width: 680px) {
     .footer-right {
+      width: 100%;
+      max-width: 360px;
+      margin-inline: auto;
       grid-template-columns: 1fr;
     }
+  }
 
+  @media (max-width: 360px) {
     .social-contact:last-child .contact-popup {
       left: auto;
       right: 0;
