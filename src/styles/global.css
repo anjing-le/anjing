@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Huninn';
+  src: url('/fonts/huninn-full.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
   --bg: #fdf5f3;
   --surface: #ffffff;
@@ -41,8 +49,7 @@
 html { scroll-behavior: smooth; scroll-padding-top: 64px; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
-    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-family: 'Huninn', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.7;
@@ -53,6 +60,8 @@ body {
   cursor: var(--cursor-default);
   overflow-x: hidden;
 }
+
+button, input, textarea, select { font-family: inherit; }
 
 a,
 button,
