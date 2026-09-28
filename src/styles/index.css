@@ -2,6 +2,14 @@
    首页样式 — index.astro
    ═══════════════════════════════════════ */
 
+@font-face {
+  font-family: 'Huninn Cloud';
+  src: url('/fonts/huninn-cloud.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 .idx-layout {
   padding: 26px 0 22px;
   display: flex;
@@ -67,6 +75,10 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 320ms ease, transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.intro-cloud__message {
+  font-family: 'Huninn Cloud', 'PingFang SC', sans-serif;
 }
 
 .intro-cloud--left { top: 3%; left: -78%; transform: translateX(34px) scale(0.82) rotate(-5deg); }
