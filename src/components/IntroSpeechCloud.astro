@@ -4,6 +4,7 @@ interface Props {
 }
 
 const { side } = Astro.props;
+const message = side === 'left' ? '嗨，你好' : '我是安静';
 ---
 
 <svg
@@ -22,4 +23,15 @@ const { side } = Astro.props;
     stroke-linecap="round"
     stroke-linejoin="round"
   />
+  <text
+    x="130"
+    y="81"
+    fill="#4c423a"
+    font-family="Kaiti SC, STKaiti, PingFang SC, sans-serif"
+    font-size="29"
+    font-weight="600"
+    letter-spacing="1"
+    text-anchor="middle"
+    dominant-baseline="middle"
+  >{message}</text>
 </svg>
