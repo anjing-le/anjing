@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import IntroSpeechCloud from '../components/IntroSpeechCloud.astro';
 import '../styles/index.css';
 ---
 
@@ -9,8 +10,7 @@ import '../styles/index.css';
       <div class="container intro-container">
         <h1 id="intro-title" class="intro-accessible-title">安静</h1>
         <div class="intro-character-wrap">
-          <span class="intro-cloud intro-cloud--left-top" aria-hidden="true"></span>
-          <span class="intro-cloud intro-cloud--left-bottom" aria-hidden="true"></span>
+          <IntroSpeechCloud side="left" />
           <img
             class="intro-character"
             src="/assets/ip/anjing-character.png"
@@ -18,8 +18,7 @@ import '../styles/index.css';
             loading="eager"
             decoding="async"
           />
-          <span class="intro-cloud intro-cloud--right-top" aria-hidden="true"></span>
-          <span class="intro-cloud intro-cloud--right-bottom" aria-hidden="true"></span>
+          <IntroSpeechCloud side="right" />
         </div>
       </div>
     </section>

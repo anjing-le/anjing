@@ -1,0 +1,25 @@
+---
+interface Props {
+  side: 'left' | 'right';
+}
+
+const { side } = Astro.props;
+---
+
+<svg
+  class={`intro-cloud intro-cloud--${side}`}
+  viewBox="0 0 260 170"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path
+    d="M 28 83 C 15 72 18 51 34 42 C 38 26 56 16 76 22 C 94 8 122 11 136 24 C 157 13 184 22 193 39 C 213 36 235 50 233 68 C 247 82 242 105 223 114 C 223 125 236 133 250 136 C 235 141 218 137 208 129 C 191 144 164 147 145 136 C 123 147 96 143 82 133 C 59 136 39 124 35 106 C 25 100 22 91 28 83 Z"
+    transform={side === 'right' ? 'translate(260 0) scale(-1 1)' : undefined}
+    fill="rgba(255, 255, 255, 0.38)"
+    stroke="rgba(76, 66, 58, 0.52)"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
