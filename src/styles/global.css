@@ -45,6 +45,13 @@
   --cursor-pointer: url('/cursors/pointer.png') 10 4, pointer;
 }
 
+@supports (cursor: image-set(url('/cursors/cursor.png') 1.33x) 0 0, auto) {
+  :root {
+    --cursor-default: image-set(url('/cursors/cursor.png') 1.33x) 0 0, auto;
+    --cursor-pointer: image-set(url('/cursors/pointer.png') 1.33x) 8 3, pointer;
+  }
+}
+
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; cursor: var(--cursor-default); }
 html { scroll-behavior: smooth; scroll-padding-top: 64px; }
 
