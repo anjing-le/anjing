@@ -4,7 +4,6 @@ interface Props {
 }
 
 const { side } = Astro.props;
-const message = side === 'left' ? '嗨，你好' : '我是安静';
 ---
 
 <svg
@@ -14,6 +13,27 @@ const message = side === 'left' ? '嗨，你好' : '我是安静';
   aria-hidden="true"
   focusable="false"
 >
+  {side === 'right' && (
+    <defs>
+      <pattern id="intro-name-crayon" width="23" height="21" patternUnits="userSpaceOnUse">
+        <rect width="23" height="21" fill="#ffd12b" />
+        <path
+          d="M2 4l3-1 M11 2l2 1 M19 6l2-1 M5 12l3-1 M15 10l3 1 M2 19l2-1 M11 17l3-1 M20 18l2-1"
+          stroke="#fff2a4"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          opacity="0.9"
+        />
+        <path
+          d="M7 5l2 1 M17 3l2-1 M1 9l2 1 M10 13l2-1 M20 13l2 1 M6 18l2 1 M16 19l2-1"
+          stroke="#eab223"
+          stroke-width="1.1"
+          stroke-linecap="round"
+          opacity="0.65"
+        />
+      </pattern>
+    </defs>
+  )}
   <path
     d="M 28 83 C 15 72 18 51 34 42 C 38 26 56 16 76 22 C 94 8 122 11 136 24 C 157 13 184 22 193 39 C 213 36 235 50 233 68 C 247 82 242 105 223 114 C 223 125 236 133 250 136 C 235 141 218 137 208 129 C 191 144 164 147 145 136 C 123 147 96 143 82 133 C 59 136 39 124 35 106 C 25 100 22 91 28 83 Z"
     transform={side === 'right' ? 'translate(260 0) scale(-1 1)' : undefined}
@@ -33,5 +53,5 @@ const message = side === 'left' ? '嗨，你好' : '我是安静';
     letter-spacing="1"
     text-anchor="middle"
     dominant-baseline="middle"
-  >{message}</text>
+  >{side === 'left' ? '嗨，你好' : <>我是<tspan class="intro-cloud__name" fill="url(#intro-name-crayon)">安静</tspan></>}</text>
 </svg>

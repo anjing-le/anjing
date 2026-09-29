@@ -81,6 +81,14 @@
   font-family: 'Huninn Cloud', 'PingFang SC', sans-serif;
 }
 
+.intro-cloud__name {
+  font-weight: 700;
+  stroke: #292320;
+  stroke-width: 1.35px;
+  stroke-linejoin: round;
+  paint-order: stroke fill;
+}
+
 .intro-cloud--left { top: 3%; left: -78%; transform: translateX(34px) scale(0.82) rotate(-5deg); }
 .intro-cloud--right { top: 43%; right: -78%; transform: translateX(-34px) scale(0.82) rotate(5deg); }
 
